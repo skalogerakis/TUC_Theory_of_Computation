@@ -1,0 +1,7 @@
+(* My first TeaC program *)
+
+const message <- “Hello world!\n”:  string;
+
+const start <- (): int => {
+  writeString(message);
+}
