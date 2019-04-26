@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#Just a simple bash file to run everything at once
+
+#TODO LOOKS LIKE PERMISSIONS ARE NOT NEEDED.CHECK!
+#echo  -e "\nGIVING PERMISSIONS"
+#give permissions for everything read write execute
+#chmod 755 ./Serial/Serial
+#chmod 755 ./OpenMP_FineGrained/FineOMP
+#chmod 755 ./Pthread_FineGrained/threadFine
+
+echo -e "\nRe-Run everything on lex file"
+
+flex mylexer.l #give name of .l file
+gcc -o mylexer lex.yy.c -lfl
+./mylexer < ./MyDocs/FlexInput/example-3.test-1.in #give name of input file
+
+echo -e "\nProcedure finished."
+
