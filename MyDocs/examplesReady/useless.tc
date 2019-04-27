@@ -4,7 +4,7 @@ const N <- 100: int;
 
 let a, b: int;
 
-const cube <- (i: int): int => {
+const $ cube <- (i: int): int => {
   return i*i*i;
 }    
    
