@@ -60,6 +60,9 @@
 
   #include <math.h>
   int lineNum = 1;
+
+  //Function used to print Error message and exit
+  void showError();
 %}
 
 /*BOOL ("true"|"false")*/
@@ -70,6 +73,7 @@ DECIMAL ([+-]?"."{NUMBER})|([+-]?{NUMBER}("."{NUMBER}?)?)
 REAL    {DECIMAL}([eE][+-]?{NUMBER})?
 /*TODO CHEK THAT LATER.SEEMS TO WORK FINE*/
 STRING  \"[^'\n]*\"
+/*STRING \"[^\\'\n\"]*\"*/
 
 %x comment 
 %x line_comment
@@ -139,9 +143,15 @@ not         { printf("token OP_NOT: \t%s\n", yytext); return KW_NOT;};
 [ \r\t]+    /* skip whitespace and return on start */
 \n 					 ++lineNum;
 <<EOF>> 	return EOF; /*Marks End of file*/
-.           { printf(ANSI_COLOR_RED "Line %d Lexical Error: Unrecognized literal %s\n" ANSI_COLOR_RESET, lineNum, yytext); exit(-10);}
+.           { showError();}
 
 %%
+
+void showError(){
+  printf(ANSI_COLOR_RED "Line %d Lexical Error: Unrecognized literal %s\n" ANSI_COLOR_RESET, lineNum, yytext); 
+  exit(-10);
+}
+
 int main ()
 {
    int token;
