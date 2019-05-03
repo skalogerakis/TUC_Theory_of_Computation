@@ -9,14 +9,12 @@
 #chmod 755 ./OpenMP_FineGrained/FineOMP
 #chmod 755 ./Pthread_FineGrained/threadFine
 
-#echo -e "\nRe-Run everything on lex file"
-echo -e "\n\nRun everything again\n"
+echo -e "\nRe-Run everything on lex file"
 
-bison -d -v -r all myanalyzer.y
 flex mylexer.l #give name of .l file
-gcc -o mycompiler myanalyzer.tab.c lex.yy.c cgen.c -lfl
+gcc -o mylexer lex.yy.c -lfl
 #./mylexer < ./MyDocs/FlexInput/example-3.test-1.in #give name of input file
-./mycompiler < ./MyDocs/examplesReady/skprog.tc #give name of input file
+./mylexer < myprog.tc #give name of input file
 
 echo -e "\nProcedure finished."
 

@@ -1,0 +1,407 @@
+Terminals unused in grammar
+
+   STRING
+   KW_LET
+   KW_STRING
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: decl_list KW_CONST KW_START ASSIGN '(' ')' ':' KW_INT ARROW '{' body '}'
+
+    2 decl_list: decl_list decl
+    3          | decl
+
+    4 decl: KW_CONST const_decl_body
+
+    5 const_decl_body: const_decl_list ':' type_spec ';'
+
+    6 const_decl_list: const_decl_list ',' const_decl_init
+    7                | const_decl_init
+
+    8 const_decl_init: const_decl_id
+    9                | const_decl_id ASSIGN expr
+
+   10 const_decl_id: IDENT
+   11              | IDENT '[' ']'
+
+   12 type_spec: KW_INT
+   13          | KW_REAL
+
+   14 expr: POSINT
+   15     | REAL
+
+   16 body: %empty
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 1
+')' (41) 1
+',' (44) 6
+':' (58) 1 5
+';' (59) 5
+'[' (91) 11
+']' (93) 11
+'{' (123) 1
+'}' (125) 1
+error (256)
+IDENT (258) 10 11
+POSINT (259) 14
+REAL (260) 15
+STRING (261)
+KW_START (262) 1
+KW_CONST (263) 1 4
+KW_LET (264)
+KW_INT (265) 1 12
+KW_REAL (266) 13
+KW_STRING (267)
+ASSIGN (268) 1 9
+ARROW (269) 1
+
+
+Nonterminals, with rules where they appear
+
+$accept (24)
+    on left: 0
+program (25)
+    on left: 1, on right: 0
+decl_list (26)
+    on left: 2 3, on right: 1 2
+decl (27)
+    on left: 4, on right: 2 3
+const_decl_body (28)
+    on left: 5, on right: 4
+const_decl_list (29)
+    on left: 6 7, on right: 5 6
+const_decl_init (30)
+    on left: 8 9, on right: 6 7
+const_decl_id (31)
+    on left: 10 11, on right: 8 9
+type_spec (32)
+    on left: 12 13, on right: 5
+expr (33)
+    on left: 14 15, on right: 9
+body (34)
+    on left: 16, on right: 1
+
+
+State 0
+
+    0 $accept: . program $end
+    1 program: . decl_list KW_CONST KW_START ASSIGN '(' ')' ':' KW_INT ARROW '{' body '}'
+    2 decl_list: . decl_list decl
+    3          | . decl
+    4 decl: . KW_CONST const_decl_body
+
+    KW_CONST  shift, and go to state 1
+
+    program    go to state 2
+    decl_list  go to state 3
+    decl       go to state 4
+
+
+State 1
+
+    4 decl: KW_CONST . const_decl_body
+    5 const_decl_body: . const_decl_list ':' type_spec ';'
+    6 const_decl_list: . const_decl_list ',' const_decl_init
+    7                | . const_decl_init
+    8 const_decl_init: . const_decl_id
+    9                | . const_decl_id ASSIGN expr
+   10 const_decl_id: . IDENT
+   11              | . IDENT '[' ']'
+
+    IDENT  shift, and go to state 5
+
+    const_decl_body  go to state 6
+    const_decl_list  go to state 7
+    const_decl_init  go to state 8
+    const_decl_id    go to state 9
+
+
+State 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 10
+
+
+State 3
+
+    1 program: decl_list . KW_CONST KW_START ASSIGN '(' ')' ':' KW_INT ARROW '{' body '}'
+    2 decl_list: decl_list . decl
+    4 decl: . KW_CONST const_decl_body
+
+    KW_CONST  shift, and go to state 11
+
+    decl  go to state 12
+
+
+State 4
+
+    3 decl_list: decl .
+
+    $default  reduce using rule 3 (decl_list)
+
+
+State 5
+
+   10 const_decl_id: IDENT .  [ASSIGN, ':', ',']
+   11              | IDENT . '[' ']'
+
+    '['  shift, and go to state 13
+
+    $default  reduce using rule 10 (const_decl_id)
+
+
+State 6
+
+    4 decl: KW_CONST const_decl_body .
+
+    $default  reduce using rule 4 (decl)
+
+
+State 7
+
+    5 const_decl_body: const_decl_list . ':' type_spec ';'
+    6 const_decl_list: const_decl_list . ',' const_decl_init
+
+    ':'  shift, and go to state 14
+    ','  shift, and go to state 15
+
+
+State 8
+
+    7 const_decl_list: const_decl_init .
+
+    $default  reduce using rule 7 (const_decl_list)
+
+
+State 9
+
+    8 const_decl_init: const_decl_id .  [':', ',']
+    9                | const_decl_id . ASSIGN expr
+
+    ASSIGN  shift, and go to state 16
+
+    $default  reduce using rule 8 (const_decl_init)
+
+
+State 10
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 11
+
+    1 program: decl_list KW_CONST . KW_START ASSIGN '(' ')' ':' KW_INT ARROW '{' body '}'
+    4 decl: KW_CONST . const_decl_body
+    5 const_decl_body: . const_decl_list ':' type_spec ';'
+    6 const_decl_list: . const_decl_list ',' const_decl_init
+    7                | . const_decl_init
+    8 const_decl_init: . const_decl_id
+    9                | . const_decl_id ASSIGN expr
+   10 const_decl_id: . IDENT
+   11              | . IDENT '[' ']'
+
+    IDENT     shift, and go to state 5
+    KW_START  shift, and go to state 17
+
+    const_decl_body  go to state 6
+    const_decl_list  go to state 7
+    const_decl_init  go to state 8
+    const_decl_id    go to state 9
+
+
+State 12
+
+    2 decl_list: decl_list decl .
+
+    $default  reduce using rule 2 (decl_list)
+
+
+State 13
+
+   11 const_decl_id: IDENT '[' . ']'
+
+    ']'  shift, and go to state 18
+
+
+State 14
+
+    5 const_decl_body: const_decl_list ':' . type_spec ';'
+   12 type_spec: . KW_INT
+   13          | . KW_REAL
+
+    KW_INT   shift, and go to state 19
+    KW_REAL  shift, and go to state 20
+
+    type_spec  go to state 21
+
+
+State 15
+
+    6 const_decl_list: const_decl_list ',' . const_decl_init
+    8 const_decl_init: . const_decl_id
+    9                | . const_decl_id ASSIGN expr
+   10 const_decl_id: . IDENT
+   11              | . IDENT '[' ']'
+
+    IDENT  shift, and go to state 5
+
+    const_decl_init  go to state 22
+    const_decl_id    go to state 9
+
+
+State 16
+
+    9 const_decl_init: const_decl_id ASSIGN . expr
+   14 expr: . POSINT
+   15     | . REAL
+
+    POSINT  shift, and go to state 23
+    REAL    shift, and go to state 24
+
+    expr  go to state 25
+
+
+State 17
+
+    1 program: decl_list KW_CONST KW_START . ASSIGN '(' ')' ':' KW_INT ARROW '{' body '}'
+
+    ASSIGN  shift, and go to state 26
+
+
+State 18
+
+   11 const_decl_id: IDENT '[' ']' .
+
+    $default  reduce using rule 11 (const_decl_id)
+
+
+State 19
+
+   12 type_spec: KW_INT .
+
+    $default  reduce using rule 12 (type_spec)
+
+
+State 20
+
+   13 type_spec: KW_REAL .
+
+    $default  reduce using rule 13 (type_spec)
+
+
+State 21
+
+    5 const_decl_body: const_decl_list ':' type_spec . ';'
+
+    ';'  shift, and go to state 27
+
+
+State 22
+
+    6 const_decl_list: const_decl_list ',' const_decl_init .
+
+    $default  reduce using rule 6 (const_decl_list)
+
+
+State 23
+
+   14 expr: POSINT .
+
+    $default  reduce using rule 14 (expr)
+
+
+State 24
+
+   15 expr: REAL .
+
+    $default  reduce using rule 15 (expr)
+
+
+State 25
+
+    9 const_decl_init: const_decl_id ASSIGN expr .
+
+    $default  reduce using rule 9 (const_decl_init)
+
+
+State 26
+
+    1 program: decl_list KW_CONST KW_START ASSIGN . '(' ')' ':' KW_INT ARROW '{' body '}'
+
+    '('  shift, and go to state 28
+
+
+State 27
+
+    5 const_decl_body: const_decl_list ':' type_spec ';' .
+
+    $default  reduce using rule 5 (const_decl_body)
+
+
+State 28
+
+    1 program: decl_list KW_CONST KW_START ASSIGN '(' . ')' ':' KW_INT ARROW '{' body '}'
+
+    ')'  shift, and go to state 29
+
+
+State 29
+
+    1 program: decl_list KW_CONST KW_START ASSIGN '(' ')' . ':' KW_INT ARROW '{' body '}'
+
+    ':'  shift, and go to state 30
+
+
+State 30
+
+    1 program: decl_list KW_CONST KW_START ASSIGN '(' ')' ':' . KW_INT ARROW '{' body '}'
+
+    KW_INT  shift, and go to state 31
+
+
+State 31
+
+    1 program: decl_list KW_CONST KW_START ASSIGN '(' ')' ':' KW_INT . ARROW '{' body '}'
+
+    ARROW  shift, and go to state 32
+
+
+State 32
+
+    1 program: decl_list KW_CONST KW_START ASSIGN '(' ')' ':' KW_INT ARROW . '{' body '}'
+
+    '{'  shift, and go to state 33
+
+
+State 33
+
+    1 program: decl_list KW_CONST KW_START ASSIGN '(' ')' ':' KW_INT ARROW '{' . body '}'
+   16 body: . %empty
+
+    $default  reduce using rule 16 (body)
+
+    body  go to state 34
+
+
+State 34
+
+    1 program: decl_list KW_CONST KW_START ASSIGN '(' ')' ':' KW_INT ARROW '{' body . '}'
+
+    '}'  shift, and go to state 35
+
+
+State 35
+
+    1 program: decl_list KW_CONST KW_START ASSIGN '(' ')' ':' KW_INT ARROW '{' body '}' .
+
+    $default  reduce using rule 1 (program)

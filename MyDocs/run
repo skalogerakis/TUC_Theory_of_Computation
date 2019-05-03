@@ -12,11 +12,11 @@
 #echo -e "\nRe-Run everything on lex file"
 echo -e "\n\nRun everything again\n"
 
-bison -d -v -r all myanalyzer.y
-flex mylexer.l #give name of .l file
-gcc -o mycompiler myanalyzer.tab.c lex.yy.c cgen.c -lfl
+bison -d -v -r all teac_parser.y
+flex teac_lex.l #give name of .l file
+gcc -o mycompiler lex.yy.c teac_parser.tab.c -lfl
 #./mylexer < ./MyDocs/FlexInput/example-3.test-1.in #give name of input file
-./mycompiler < ./MyDocs/examplesReady/skprog.tc #give name of input file
+./mycompiler < ./examplesReady/myprog.tc #give name of input file
 
 echo -e "\nProcedure finished."
 

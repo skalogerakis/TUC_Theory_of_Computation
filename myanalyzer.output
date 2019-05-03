@@ -1,0 +1,313 @@
+Terminals unused in grammar
+
+   TK_IDENT
+   TK_STRING
+   KW_IF
+   KW_THEN
+   KW_ELSE
+   KW_TRUE
+   KW_FALSE
+
+
+Grammar
+
+    0 $accept: input $end
+
+    1 input: %empty
+    2      | input expr DEL_SEMICOLON
+
+    3 expr: TK_INT
+    4     | TK_REAL
+    5     | '(' expr ')'
+    6     | expr '+' expr
+    7     | expr '-' expr
+    8     | expr '*' expr
+    9     | expr '/' expr
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 5
+')' (41) 5
+'*' (42) 8
+'+' (43) 6
+'-' (45) 7
+'/' (47) 9
+error (256)
+TK_IDENT (258)
+TK_INT (259) 3
+TK_REAL (260) 4
+TK_STRING (261)
+KW_IF (262)
+KW_THEN (263)
+KW_ELSE (264)
+KW_TRUE (265)
+KW_FALSE (266)
+DEL_SEMICOLON (267) 2
+
+
+Nonterminals, with rules where they appear
+
+$accept (19)
+    on left: 0
+input (20)
+    on left: 1 2, on right: 0 2
+expr (21)
+    on left: 3 4 5 6 7 8 9, on right: 2 5 6 7 8 9
+
+
+State 0
+
+    0 $accept: . input $end
+    1 input: . %empty
+    2      | . input expr DEL_SEMICOLON
+
+    $default  reduce using rule 1 (input)
+
+    input  go to state 1
+
+
+State 1
+
+    0 $accept: input . $end
+    2 input: input . expr DEL_SEMICOLON
+    3 expr: . TK_INT
+    4     | . TK_REAL
+    5     | . '(' expr ')'
+    6     | . expr '+' expr
+    7     | . expr '-' expr
+    8     | . expr '*' expr
+    9     | . expr '/' expr
+
+    $end     shift, and go to state 2
+    TK_INT   shift, and go to state 3
+    TK_REAL  shift, and go to state 4
+    '('      shift, and go to state 5
+
+    expr  go to state 6
+
+
+State 2
+
+    0 $accept: input $end .
+
+    $default  accept
+
+
+State 3
+
+    3 expr: TK_INT .
+
+    $default  reduce using rule 3 (expr)
+
+
+State 4
+
+    4 expr: TK_REAL .
+
+    $default  reduce using rule 4 (expr)
+
+
+State 5
+
+    3 expr: . TK_INT
+    4     | . TK_REAL
+    5     | . '(' expr ')'
+    5     | '(' . expr ')'
+    6     | . expr '+' expr
+    7     | . expr '-' expr
+    8     | . expr '*' expr
+    9     | . expr '/' expr
+
+    TK_INT   shift, and go to state 3
+    TK_REAL  shift, and go to state 4
+    '('      shift, and go to state 5
+
+    expr  go to state 7
+
+
+State 6
+
+    2 input: input expr . DEL_SEMICOLON
+    6 expr: expr . '+' expr
+    7     | expr . '-' expr
+    8     | expr . '*' expr
+    9     | expr . '/' expr
+
+    '-'            shift, and go to state 8
+    '+'            shift, and go to state 9
+    '*'            shift, and go to state 10
+    '/'            shift, and go to state 11
+    DEL_SEMICOLON  shift, and go to state 12
+
+
+State 7
+
+    5 expr: '(' expr . ')'
+    6     | expr . '+' expr
+    7     | expr . '-' expr
+    8     | expr . '*' expr
+    9     | expr . '/' expr
+
+    '-'  shift, and go to state 8
+    '+'  shift, and go to state 9
+    '*'  shift, and go to state 10
+    '/'  shift, and go to state 11
+    ')'  shift, and go to state 13
+
+
+State 8
+
+    3 expr: . TK_INT
+    4     | . TK_REAL
+    5     | . '(' expr ')'
+    6     | . expr '+' expr
+    7     | . expr '-' expr
+    7     | expr '-' . expr
+    8     | . expr '*' expr
+    9     | . expr '/' expr
+
+    TK_INT   shift, and go to state 3
+    TK_REAL  shift, and go to state 4
+    '('      shift, and go to state 5
+
+    expr  go to state 14
+
+
+State 9
+
+    3 expr: . TK_INT
+    4     | . TK_REAL
+    5     | . '(' expr ')'
+    6     | . expr '+' expr
+    6     | expr '+' . expr
+    7     | . expr '-' expr
+    8     | . expr '*' expr
+    9     | . expr '/' expr
+
+    TK_INT   shift, and go to state 3
+    TK_REAL  shift, and go to state 4
+    '('      shift, and go to state 5
+
+    expr  go to state 15
+
+
+State 10
+
+    3 expr: . TK_INT
+    4     | . TK_REAL
+    5     | . '(' expr ')'
+    6     | . expr '+' expr
+    7     | . expr '-' expr
+    8     | . expr '*' expr
+    8     | expr '*' . expr
+    9     | . expr '/' expr
+
+    TK_INT   shift, and go to state 3
+    TK_REAL  shift, and go to state 4
+    '('      shift, and go to state 5
+
+    expr  go to state 16
+
+
+State 11
+
+    3 expr: . TK_INT
+    4     | . TK_REAL
+    5     | . '(' expr ')'
+    6     | . expr '+' expr
+    7     | . expr '-' expr
+    8     | . expr '*' expr
+    9     | . expr '/' expr
+    9     | expr '/' . expr
+
+    TK_INT   shift, and go to state 3
+    TK_REAL  shift, and go to state 4
+    '('      shift, and go to state 5
+
+    expr  go to state 17
+
+
+State 12
+
+    2 input: input expr DEL_SEMICOLON .
+
+    $default  reduce using rule 2 (input)
+
+
+State 13
+
+    5 expr: '(' expr ')' .
+
+    $default  reduce using rule 5 (expr)
+
+
+State 14
+
+    6 expr: expr . '+' expr
+    7     | expr . '-' expr
+    7     | expr '-' expr .  ['-', '+', DEL_SEMICOLON, ')']
+    8     | expr . '*' expr
+    9     | expr . '/' expr
+
+    '*'  shift, and go to state 10
+    '/'  shift, and go to state 11
+
+    $default  reduce using rule 7 (expr)
+
+    Conflict between rule 7 and token '-' resolved as reduce (%left '-').
+    Conflict between rule 7 and token '+' resolved as reduce (%left '+').
+    Conflict between rule 7 and token '*' resolved as shift ('-' < '*').
+    Conflict between rule 7 and token '/' resolved as shift ('-' < '/').
+
+
+State 15
+
+    6 expr: expr . '+' expr
+    6     | expr '+' expr .  ['-', '+', DEL_SEMICOLON, ')']
+    7     | expr . '-' expr
+    8     | expr . '*' expr
+    9     | expr . '/' expr
+
+    '*'  shift, and go to state 10
+    '/'  shift, and go to state 11
+
+    $default  reduce using rule 6 (expr)
+
+    Conflict between rule 6 and token '-' resolved as reduce (%left '-').
+    Conflict between rule 6 and token '+' resolved as reduce (%left '+').
+    Conflict between rule 6 and token '*' resolved as shift ('+' < '*').
+    Conflict between rule 6 and token '/' resolved as shift ('+' < '/').
+
+
+State 16
+
+    6 expr: expr . '+' expr
+    7     | expr . '-' expr
+    8     | expr . '*' expr
+    8     | expr '*' expr .  ['-', '+', '*', '/', DEL_SEMICOLON, ')']
+    9     | expr . '/' expr
+
+    $default  reduce using rule 8 (expr)
+
+    Conflict between rule 8 and token '-' resolved as reduce ('-' < '*').
+    Conflict between rule 8 and token '+' resolved as reduce ('+' < '*').
+    Conflict between rule 8 and token '*' resolved as reduce (%left '*').
+    Conflict between rule 8 and token '/' resolved as reduce (%left '/').
+
+
+State 17
+
+    6 expr: expr . '+' expr
+    7     | expr . '-' expr
+    8     | expr . '*' expr
+    9     | expr . '/' expr
+    9     | expr '/' expr .  ['-', '+', '*', '/', DEL_SEMICOLON, ')']
+
+    $default  reduce using rule 9 (expr)
+
+    Conflict between rule 9 and token '-' resolved as reduce ('-' < '/').
+    Conflict between rule 9 and token '+' resolved as reduce ('+' < '/').
+    Conflict between rule 9 and token '*' resolved as reduce (%left '*').
+    Conflict between rule 9 and token '/' resolved as reduce (%left '/').
