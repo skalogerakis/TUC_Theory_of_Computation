@@ -49,12 +49,46 @@ extern int yydebug;
     TK_INT = 259,
     TK_REAL = 260,
     TK_STRING = 261,
-    KW_IF = 262,
-    KW_THEN = 263,
-    KW_ELSE = 264,
-    KW_TRUE = 265,
-    KW_FALSE = 266,
-    DEL_SEMICOLON = 267
+    KW_INT = 262,
+    KW_REAL = 263,
+    KW_BOOL = 264,
+    KW_STRING = 265,
+    KW_TRUE = 266,
+    KW_FALSE = 267,
+    KW_IF = 268,
+    KW_THEN = 269,
+    KW_ELSE = 270,
+    KW_FI = 271,
+    KW_WHILE = 272,
+    KW_LOOP = 273,
+    KW_POOL = 274,
+    KW_CONST = 275,
+    KW_LET = 276,
+    KW_RETURN = 277,
+    KW_AND = 278,
+    KW_OR = 279,
+    KW_START = 280,
+    KW_NOT = 281,
+    OP_PLUS = 282,
+    OP_MINUS = 283,
+    OP_MUL = 284,
+    OP_DIV = 285,
+    OP_MOD = 286,
+    OP_EQUALS = 287,
+    OP_NOT_EQUALS = 288,
+    OP_SMALLER = 289,
+    OP_SMALLER_EQUALS = 290,
+    OP_ASSIGN = 291,
+    OP_ARROW = 292,
+    DEL_SEMICOLON = 293,
+    DEL_LEFT_PARENTESIS = 294,
+    DEL_RIGHT_PARENTESIS = 295,
+    DEL_COMMA = 296,
+    DEL_LEFT_BRACKETS = 297,
+    DEL_RIGHT_BRACKETS = 298,
+    DEL_COLON = 299,
+    DEL_LEFT_CURLY_BRACKETS = 300,
+    DEL_RIGHT_CURLY_BRACKETS = 301
   };
 #endif
 
@@ -63,11 +97,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 137 "myanalyzer.y" /* yacc.c:1909  */
+#line 13 "myanalyzer.y" /* yacc.c:1909  */
 
-  char* str;
+	char* crepr;
 
-#line 71 "myanalyzer.tab.h" /* yacc.c:1909  */
+#line 105 "myanalyzer.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
