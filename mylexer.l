@@ -73,8 +73,9 @@
 /*BOOL ("true"|"false")*/
 ID      [a-zA-Z_][0-9a-zA-Z_]*
 DIGIT   [0-9]
-NUMBER  [+-]?{DIGIT}{DIGIT}*
-DECIMAL ("."{NUMBER})|([+-]?{NUMBER}("."{NUMBER}?)?)
+/*INIT NUMBER  [+-]?{DIGIT}{DIGIT}* */
+NUMBER  {DIGIT}{DIGIT}*
+DECIMAL ("."{NUMBER})|({NUMBER}("."{NUMBER}?)?)
 REAL    {DECIMAL}([eE][+-]?{NUMBER})?
 /*TODO CHEK THAT LATER.SEEMS TO WORK FINE*/
 STRING  \"[^'\n]*\"

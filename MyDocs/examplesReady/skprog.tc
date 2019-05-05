@@ -1,2 +1,18 @@
-2;
-3 + 3;
+-- LIN2 or 3 and 5 = 3 < 4 + 34 - 5 != -2 not -a * 3 % 4 + -2
+-- sdf(a+1) % cube(b+3)
+--a + b[(k +1)*2]
+--q[(s + 2)]
+return ;
+--while not 2 loop
+--	y <- x+ 5;
+--	y <- x+ 5;
+--pool;
+
+--if a * 4 then
+	
+
+--	if v * r then 
+--	y <- x+ 5;
+--	fi;
+
+--fi;

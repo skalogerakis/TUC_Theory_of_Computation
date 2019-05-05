@@ -1,42 +1,16 @@
 Terminals unused in grammar
 
-   TK_IDENT
-   TK_STRING
    KW_INT
    KW_REAL
    KW_BOOL
    KW_STRING
    KW_TRUE
    KW_FALSE
-   KW_IF
-   KW_THEN
-   KW_ELSE
-   KW_FI
-   KW_WHILE
-   KW_LOOP
-   KW_POOL
    KW_CONST
    KW_LET
-   KW_RETURN
-   KW_AND
-   KW_OR
    KW_START
-   KW_NOT
-   OP_MINUS
-   OP_MUL
-   OP_DIV
-   OP_MOD
-   OP_EQUALS
-   OP_NOT_EQUALS
-   OP_SMALLER
-   OP_SMALLER_EQUALS
-   OP_ASSIGN
    OP_ARROW
-   DEL_LEFT_PARENTESIS
-   DEL_RIGHT_PARENTESIS
    DEL_COMMA
-   DEL_LEFT_BRACKETS
-   DEL_RIGHT_BRACKETS
    DEL_COLON
    DEL_LEFT_CURLY_BRACKETS
    DEL_RIGHT_CURLY_BRACKETS
@@ -46,59 +20,105 @@ Grammar
 
     0 $accept: input $end
 
-    1 input: %empty
-    2      | input expr DEL_SEMICOLON
+    1 data_types: TK_IDENT
+    2           | TK_INT
+    3           | TK_REAL
+    4           | TK_STRING
 
-    3 expr: TK_INT
-    4     | TK_REAL
-    5     | expr OP_PLUS expr
+    5 specialExpr: data_types
+    6            | TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+
+    8 notExpression: specialExpr
+    9              | KW_NOT signExpression
+
+   10 signExpression: notExpression
+   11               | OP_PLUS notExpression
+   12               | OP_MINUS notExpression
+
+   13 multiplicativeExpression: signExpression
+   14                         | multiplicativeExpression OP_MUL signExpression
+   15                         | multiplicativeExpression OP_DIV signExpression
+   16                         | multiplicativeExpression OP_MOD signExpression
+
+   17 additiveExpression: multiplicativeExpression
+   18                   | additiveExpression OP_PLUS multiplicativeExpression
+   19                   | additiveExpression OP_MINUS multiplicativeExpression
+
+   20 relationalExpression: additiveExpression
+   21                     | relationalExpression OP_EQUALS additiveExpression
+   22                     | relationalExpression OP_NOT_EQUALS additiveExpression
+   23                     | relationalExpression OP_SMALLER additiveExpression
+   24                     | relationalExpression OP_SMALLER_EQUALS additiveExpression
+
+   25 logicalAndExpression: relationalExpression
+   26                     | logicalAndExpression KW_OR relationalExpression
+   27                     | logicalAndExpression KW_AND relationalExpression
+
+   28 expression: logicalAndExpression
+
+   29 __statement: TK_IDENT OP_ASSIGN expression DEL_SEMICOLON
+   30            | __selection
+   31            | __iteration
+   32            | __return
+
+   33 __selection: KW_IF expression KW_THEN __statement KW_FI DEL_SEMICOLON
+   34            | KW_IF expression KW_THEN __statement KW_ELSE __statement KW_FI DEL_SEMICOLON
+
+   35 __iteration: KW_WHILE expression KW_LOOP __statement KW_POOL DEL_SEMICOLON
+
+   36 __return: KW_RETURN DEL_SEMICOLON
+   37         | KW_RETURN expression DEL_SEMICOLON
+
+   38 input: %empty
+   39      | __statement
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-TK_IDENT (258)
-TK_INT (259) 3
-TK_REAL (260) 4
-TK_STRING (261)
+TK_IDENT (258) 1 6 29
+TK_INT (259) 2
+TK_REAL (260) 3
+TK_STRING (261) 4
 KW_INT (262)
 KW_REAL (263)
 KW_BOOL (264)
 KW_STRING (265)
 KW_TRUE (266)
 KW_FALSE (267)
-KW_IF (268)
-KW_THEN (269)
-KW_ELSE (270)
-KW_FI (271)
-KW_WHILE (272)
-KW_LOOP (273)
-KW_POOL (274)
+KW_IF (268) 33 34
+KW_THEN (269) 33 34
+KW_ELSE (270) 34
+KW_FI (271) 33 34
+KW_WHILE (272) 35
+KW_LOOP (273) 35
+KW_POOL (274) 35
 KW_CONST (275)
 KW_LET (276)
-KW_RETURN (277)
-KW_AND (278)
-KW_OR (279)
+KW_RETURN (277) 36 37
+KW_AND (278) 27
+KW_OR (279) 26
 KW_START (280)
-KW_NOT (281)
-OP_PLUS (282) 5
-OP_MINUS (283)
-OP_MUL (284)
-OP_DIV (285)
-OP_MOD (286)
-OP_EQUALS (287)
-OP_NOT_EQUALS (288)
-OP_SMALLER (289)
-OP_SMALLER_EQUALS (290)
-OP_ASSIGN (291)
+KW_NOT (281) 9
+OP_PLUS (282) 11 18
+OP_MINUS (283) 12 19
+OP_MUL (284) 14
+OP_DIV (285) 15
+OP_MOD (286) 16
+OP_EQUALS (287) 21
+OP_NOT_EQUALS (288) 22
+OP_SMALLER (289) 23
+OP_SMALLER_EQUALS (290) 24
+OP_ASSIGN (291) 29
 OP_ARROW (292)
-DEL_SEMICOLON (293) 2
-DEL_LEFT_PARENTESIS (294)
-DEL_RIGHT_PARENTESIS (295)
+DEL_SEMICOLON (293) 29 33 34 35 36 37
+DEL_LEFT_PARENTESIS (294) 7
+DEL_RIGHT_PARENTESIS (295) 7
 DEL_COMMA (296)
-DEL_LEFT_BRACKETS (297)
-DEL_RIGHT_BRACKETS (298)
+DEL_LEFT_BRACKETS (297) 6
+DEL_RIGHT_BRACKETS (298) 6
 DEL_COLON (299)
 DEL_LEFT_CURLY_BRACKETS (300)
 DEL_RIGHT_CURLY_BRACKETS (301)
@@ -108,93 +128,1401 @@ Nonterminals, with rules where they appear
 
 $accept (47)
     on left: 0
-input (48)
-    on left: 1 2, on right: 0 2
-expr (49)
-    on left: 3 4 5, on right: 2 5
+data_types (48)
+    on left: 1 2 3 4, on right: 5
+specialExpr (49)
+    on left: 5 6 7, on right: 8
+notExpression (50)
+    on left: 8 9, on right: 10 11 12
+signExpression (51)
+    on left: 10 11 12, on right: 9 13 14 15 16
+multiplicativeExpression (52)
+    on left: 13 14 15 16, on right: 14 15 16 17 18 19
+additiveExpression (53)
+    on left: 17 18 19, on right: 18 19 20 21 22 23 24
+relationalExpression (54)
+    on left: 20 21 22 23 24, on right: 21 22 23 24 25 26 27
+logicalAndExpression (55)
+    on left: 25 26 27, on right: 26 27 28
+expression (56)
+    on left: 28, on right: 6 7 29 33 34 35 37
+__statement (57)
+    on left: 29 30 31 32, on right: 33 34 35 39
+__selection (58)
+    on left: 33 34, on right: 30
+__iteration (59)
+    on left: 35, on right: 31
+__return (60)
+    on left: 36 37, on right: 32
+input (61)
+    on left: 38 39, on right: 0
 
 
 State 0
 
     0 $accept: . input $end
-    1 input: . %empty
-    2      | . input expr DEL_SEMICOLON
+   29 __statement: . TK_IDENT OP_ASSIGN expression DEL_SEMICOLON
+   30            | . __selection
+   31            | . __iteration
+   32            | . __return
+   33 __selection: . KW_IF expression KW_THEN __statement KW_FI DEL_SEMICOLON
+   34            | . KW_IF expression KW_THEN __statement KW_ELSE __statement KW_FI DEL_SEMICOLON
+   35 __iteration: . KW_WHILE expression KW_LOOP __statement KW_POOL DEL_SEMICOLON
+   36 __return: . KW_RETURN DEL_SEMICOLON
+   37         | . KW_RETURN expression DEL_SEMICOLON
+   38 input: . %empty  [$end]
+   39      | . __statement
 
-    $default  reduce using rule 1 (input)
+    TK_IDENT   shift, and go to state 1
+    KW_IF      shift, and go to state 2
+    KW_WHILE   shift, and go to state 3
+    KW_RETURN  shift, and go to state 4
 
-    input  go to state 1
+    $default  reduce using rule 38 (input)
+
+    __statement  go to state 5
+    __selection  go to state 6
+    __iteration  go to state 7
+    __return     go to state 8
+    input        go to state 9
 
 
 State 1
 
-    0 $accept: input . $end
-    2 input: input . expr DEL_SEMICOLON
-    3 expr: . TK_INT
-    4     | . TK_REAL
-    5     | . expr OP_PLUS expr
+   29 __statement: TK_IDENT . OP_ASSIGN expression DEL_SEMICOLON
 
-    $end     shift, and go to state 2
-    TK_INT   shift, and go to state 3
-    TK_REAL  shift, and go to state 4
-
-    expr  go to state 5
+    OP_ASSIGN  shift, and go to state 10
 
 
 State 2
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   13 multiplicativeExpression: . signExpression
+   14                         | . multiplicativeExpression OP_MUL signExpression
+   15                         | . multiplicativeExpression OP_DIV signExpression
+   16                         | . multiplicativeExpression OP_MOD signExpression
+   17 additiveExpression: . multiplicativeExpression
+   18                   | . additiveExpression OP_PLUS multiplicativeExpression
+   19                   | . additiveExpression OP_MINUS multiplicativeExpression
+   20 relationalExpression: . additiveExpression
+   21                     | . relationalExpression OP_EQUALS additiveExpression
+   22                     | . relationalExpression OP_NOT_EQUALS additiveExpression
+   23                     | . relationalExpression OP_SMALLER additiveExpression
+   24                     | . relationalExpression OP_SMALLER_EQUALS additiveExpression
+   25 logicalAndExpression: . relationalExpression
+   26                     | . logicalAndExpression KW_OR relationalExpression
+   27                     | . logicalAndExpression KW_AND relationalExpression
+   28 expression: . logicalAndExpression
+   33 __selection: KW_IF . expression KW_THEN __statement KW_FI DEL_SEMICOLON
+   34            | KW_IF . expression KW_THEN __statement KW_ELSE __statement KW_FI DEL_SEMICOLON
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types                go to state 19
+    specialExpr               go to state 20
+    notExpression             go to state 21
+    signExpression            go to state 22
+    multiplicativeExpression  go to state 23
+    additiveExpression        go to state 24
+    relationalExpression      go to state 25
+    logicalAndExpression      go to state 26
+    expression                go to state 27
+
+
+State 3
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   13 multiplicativeExpression: . signExpression
+   14                         | . multiplicativeExpression OP_MUL signExpression
+   15                         | . multiplicativeExpression OP_DIV signExpression
+   16                         | . multiplicativeExpression OP_MOD signExpression
+   17 additiveExpression: . multiplicativeExpression
+   18                   | . additiveExpression OP_PLUS multiplicativeExpression
+   19                   | . additiveExpression OP_MINUS multiplicativeExpression
+   20 relationalExpression: . additiveExpression
+   21                     | . relationalExpression OP_EQUALS additiveExpression
+   22                     | . relationalExpression OP_NOT_EQUALS additiveExpression
+   23                     | . relationalExpression OP_SMALLER additiveExpression
+   24                     | . relationalExpression OP_SMALLER_EQUALS additiveExpression
+   25 logicalAndExpression: . relationalExpression
+   26                     | . logicalAndExpression KW_OR relationalExpression
+   27                     | . logicalAndExpression KW_AND relationalExpression
+   28 expression: . logicalAndExpression
+   35 __iteration: KW_WHILE . expression KW_LOOP __statement KW_POOL DEL_SEMICOLON
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types                go to state 19
+    specialExpr               go to state 20
+    notExpression             go to state 21
+    signExpression            go to state 22
+    multiplicativeExpression  go to state 23
+    additiveExpression        go to state 24
+    relationalExpression      go to state 25
+    logicalAndExpression      go to state 26
+    expression                go to state 28
+
+
+State 4
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   13 multiplicativeExpression: . signExpression
+   14                         | . multiplicativeExpression OP_MUL signExpression
+   15                         | . multiplicativeExpression OP_DIV signExpression
+   16                         | . multiplicativeExpression OP_MOD signExpression
+   17 additiveExpression: . multiplicativeExpression
+   18                   | . additiveExpression OP_PLUS multiplicativeExpression
+   19                   | . additiveExpression OP_MINUS multiplicativeExpression
+   20 relationalExpression: . additiveExpression
+   21                     | . relationalExpression OP_EQUALS additiveExpression
+   22                     | . relationalExpression OP_NOT_EQUALS additiveExpression
+   23                     | . relationalExpression OP_SMALLER additiveExpression
+   24                     | . relationalExpression OP_SMALLER_EQUALS additiveExpression
+   25 logicalAndExpression: . relationalExpression
+   26                     | . logicalAndExpression KW_OR relationalExpression
+   27                     | . logicalAndExpression KW_AND relationalExpression
+   28 expression: . logicalAndExpression
+   36 __return: KW_RETURN . DEL_SEMICOLON
+   37         | KW_RETURN . expression DEL_SEMICOLON
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_SEMICOLON        shift, and go to state 29
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types                go to state 19
+    specialExpr               go to state 20
+    notExpression             go to state 21
+    signExpression            go to state 22
+    multiplicativeExpression  go to state 23
+    additiveExpression        go to state 24
+    relationalExpression      go to state 25
+    logicalAndExpression      go to state 26
+    expression                go to state 30
+
+
+State 5
+
+   39 input: __statement .
+
+    $default  reduce using rule 39 (input)
+
+
+State 6
+
+   30 __statement: __selection .
+
+    $default  reduce using rule 30 (__statement)
+
+
+State 7
+
+   31 __statement: __iteration .
+
+    $default  reduce using rule 31 (__statement)
+
+
+State 8
+
+   32 __statement: __return .
+
+    $default  reduce using rule 32 (__statement)
+
+
+State 9
+
+    0 $accept: input . $end
+
+    $end  shift, and go to state 31
+
+
+State 10
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   13 multiplicativeExpression: . signExpression
+   14                         | . multiplicativeExpression OP_MUL signExpression
+   15                         | . multiplicativeExpression OP_DIV signExpression
+   16                         | . multiplicativeExpression OP_MOD signExpression
+   17 additiveExpression: . multiplicativeExpression
+   18                   | . additiveExpression OP_PLUS multiplicativeExpression
+   19                   | . additiveExpression OP_MINUS multiplicativeExpression
+   20 relationalExpression: . additiveExpression
+   21                     | . relationalExpression OP_EQUALS additiveExpression
+   22                     | . relationalExpression OP_NOT_EQUALS additiveExpression
+   23                     | . relationalExpression OP_SMALLER additiveExpression
+   24                     | . relationalExpression OP_SMALLER_EQUALS additiveExpression
+   25 logicalAndExpression: . relationalExpression
+   26                     | . logicalAndExpression KW_OR relationalExpression
+   27                     | . logicalAndExpression KW_AND relationalExpression
+   28 expression: . logicalAndExpression
+   29 __statement: TK_IDENT OP_ASSIGN . expression DEL_SEMICOLON
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types                go to state 19
+    specialExpr               go to state 20
+    notExpression             go to state 21
+    signExpression            go to state 22
+    multiplicativeExpression  go to state 23
+    additiveExpression        go to state 24
+    relationalExpression      go to state 25
+    logicalAndExpression      go to state 26
+    expression                go to state 32
+
+
+State 11
+
+    1 data_types: TK_IDENT .  [KW_THEN, KW_LOOP, KW_AND, KW_OR, OP_PLUS, OP_MINUS, OP_MUL, OP_DIV, OP_MOD, OP_EQUALS, OP_NOT_EQUALS, OP_SMALLER, OP_SMALLER_EQUALS, DEL_SEMICOLON, DEL_RIGHT_PARENTESIS, DEL_RIGHT_BRACKETS]
+    6 specialExpr: TK_IDENT . DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+
+    DEL_LEFT_BRACKETS  shift, and go to state 33
+
+    $default  reduce using rule 1 (data_types)
+
+
+State 12
+
+    2 data_types: TK_INT .
+
+    $default  reduce using rule 2 (data_types)
+
+
+State 13
+
+    3 data_types: TK_REAL .
+
+    $default  reduce using rule 3 (data_types)
+
+
+State 14
+
+    4 data_types: TK_STRING .
+
+    $default  reduce using rule 4 (data_types)
+
+
+State 15
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+    9              | KW_NOT . signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types      go to state 19
+    specialExpr     go to state 20
+    notExpression   go to state 21
+    signExpression  go to state 34
+
+
+State 16
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   11 signExpression: OP_PLUS . notExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types     go to state 19
+    specialExpr    go to state 20
+    notExpression  go to state 35
+
+
+State 17
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   12 signExpression: OP_MINUS . notExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types     go to state 19
+    specialExpr    go to state 20
+    notExpression  go to state 36
+
+
+State 18
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    7            | DEL_LEFT_PARENTESIS . expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   13 multiplicativeExpression: . signExpression
+   14                         | . multiplicativeExpression OP_MUL signExpression
+   15                         | . multiplicativeExpression OP_DIV signExpression
+   16                         | . multiplicativeExpression OP_MOD signExpression
+   17 additiveExpression: . multiplicativeExpression
+   18                   | . additiveExpression OP_PLUS multiplicativeExpression
+   19                   | . additiveExpression OP_MINUS multiplicativeExpression
+   20 relationalExpression: . additiveExpression
+   21                     | . relationalExpression OP_EQUALS additiveExpression
+   22                     | . relationalExpression OP_NOT_EQUALS additiveExpression
+   23                     | . relationalExpression OP_SMALLER additiveExpression
+   24                     | . relationalExpression OP_SMALLER_EQUALS additiveExpression
+   25 logicalAndExpression: . relationalExpression
+   26                     | . logicalAndExpression KW_OR relationalExpression
+   27                     | . logicalAndExpression KW_AND relationalExpression
+   28 expression: . logicalAndExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types                go to state 19
+    specialExpr               go to state 20
+    notExpression             go to state 21
+    signExpression            go to state 22
+    multiplicativeExpression  go to state 23
+    additiveExpression        go to state 24
+    relationalExpression      go to state 25
+    logicalAndExpression      go to state 26
+    expression                go to state 37
+
+
+State 19
+
+    5 specialExpr: data_types .
+
+    $default  reduce using rule 5 (specialExpr)
+
+
+State 20
+
+    8 notExpression: specialExpr .
+
+    $default  reduce using rule 8 (notExpression)
+
+
+State 21
+
+   10 signExpression: notExpression .
+
+    $default  reduce using rule 10 (signExpression)
+
+
+State 22
+
+   13 multiplicativeExpression: signExpression .
+
+    $default  reduce using rule 13 (multiplicativeExpression)
+
+
+State 23
+
+   14 multiplicativeExpression: multiplicativeExpression . OP_MUL signExpression
+   15                         | multiplicativeExpression . OP_DIV signExpression
+   16                         | multiplicativeExpression . OP_MOD signExpression
+   17 additiveExpression: multiplicativeExpression .  [KW_THEN, KW_LOOP, KW_AND, KW_OR, OP_PLUS, OP_MINUS, OP_EQUALS, OP_NOT_EQUALS, OP_SMALLER, OP_SMALLER_EQUALS, DEL_SEMICOLON, DEL_RIGHT_PARENTESIS, DEL_RIGHT_BRACKETS]
+
+    OP_MUL  shift, and go to state 38
+    OP_DIV  shift, and go to state 39
+    OP_MOD  shift, and go to state 40
+
+    $default  reduce using rule 17 (additiveExpression)
+
+
+State 24
+
+   18 additiveExpression: additiveExpression . OP_PLUS multiplicativeExpression
+   19                   | additiveExpression . OP_MINUS multiplicativeExpression
+   20 relationalExpression: additiveExpression .  [KW_THEN, KW_LOOP, KW_AND, KW_OR, OP_EQUALS, OP_NOT_EQUALS, OP_SMALLER, OP_SMALLER_EQUALS, DEL_SEMICOLON, DEL_RIGHT_PARENTESIS, DEL_RIGHT_BRACKETS]
+
+    OP_PLUS   shift, and go to state 41
+    OP_MINUS  shift, and go to state 42
+
+    $default  reduce using rule 20 (relationalExpression)
+
+
+State 25
+
+   21 relationalExpression: relationalExpression . OP_EQUALS additiveExpression
+   22                     | relationalExpression . OP_NOT_EQUALS additiveExpression
+   23                     | relationalExpression . OP_SMALLER additiveExpression
+   24                     | relationalExpression . OP_SMALLER_EQUALS additiveExpression
+   25 logicalAndExpression: relationalExpression .  [KW_THEN, KW_LOOP, KW_AND, KW_OR, DEL_SEMICOLON, DEL_RIGHT_PARENTESIS, DEL_RIGHT_BRACKETS]
+
+    OP_EQUALS          shift, and go to state 43
+    OP_NOT_EQUALS      shift, and go to state 44
+    OP_SMALLER         shift, and go to state 45
+    OP_SMALLER_EQUALS  shift, and go to state 46
+
+    $default  reduce using rule 25 (logicalAndExpression)
+
+
+State 26
+
+   26 logicalAndExpression: logicalAndExpression . KW_OR relationalExpression
+   27                     | logicalAndExpression . KW_AND relationalExpression
+   28 expression: logicalAndExpression .  [KW_THEN, KW_LOOP, DEL_SEMICOLON, DEL_RIGHT_PARENTESIS, DEL_RIGHT_BRACKETS]
+
+    KW_AND  shift, and go to state 47
+    KW_OR   shift, and go to state 48
+
+    $default  reduce using rule 28 (expression)
+
+
+State 27
+
+   33 __selection: KW_IF expression . KW_THEN __statement KW_FI DEL_SEMICOLON
+   34            | KW_IF expression . KW_THEN __statement KW_ELSE __statement KW_FI DEL_SEMICOLON
+
+    KW_THEN  shift, and go to state 49
+
+
+State 28
+
+   35 __iteration: KW_WHILE expression . KW_LOOP __statement KW_POOL DEL_SEMICOLON
+
+    KW_LOOP  shift, and go to state 50
+
+
+State 29
+
+   36 __return: KW_RETURN DEL_SEMICOLON .
+
+    $default  reduce using rule 36 (__return)
+
+
+State 30
+
+   37 __return: KW_RETURN expression . DEL_SEMICOLON
+
+    DEL_SEMICOLON  shift, and go to state 51
+
+
+State 31
 
     0 $accept: input $end .
 
     $default  accept
 
 
-State 3
+State 32
 
-    3 expr: TK_INT .
+   29 __statement: TK_IDENT OP_ASSIGN expression . DEL_SEMICOLON
 
-    $default  reduce using rule 3 (expr)
-
-
-State 4
-
-    4 expr: TK_REAL .
-
-    $default  reduce using rule 4 (expr)
+    DEL_SEMICOLON  shift, and go to state 52
 
 
-State 5
+State 33
 
-    2 input: input expr . DEL_SEMICOLON
-    5 expr: expr . OP_PLUS expr
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    6            | TK_IDENT DEL_LEFT_BRACKETS . expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   13 multiplicativeExpression: . signExpression
+   14                         | . multiplicativeExpression OP_MUL signExpression
+   15                         | . multiplicativeExpression OP_DIV signExpression
+   16                         | . multiplicativeExpression OP_MOD signExpression
+   17 additiveExpression: . multiplicativeExpression
+   18                   | . additiveExpression OP_PLUS multiplicativeExpression
+   19                   | . additiveExpression OP_MINUS multiplicativeExpression
+   20 relationalExpression: . additiveExpression
+   21                     | . relationalExpression OP_EQUALS additiveExpression
+   22                     | . relationalExpression OP_NOT_EQUALS additiveExpression
+   23                     | . relationalExpression OP_SMALLER additiveExpression
+   24                     | . relationalExpression OP_SMALLER_EQUALS additiveExpression
+   25 logicalAndExpression: . relationalExpression
+   26                     | . logicalAndExpression KW_OR relationalExpression
+   27                     | . logicalAndExpression KW_AND relationalExpression
+   28 expression: . logicalAndExpression
 
-    OP_PLUS        shift, and go to state 6
-    DEL_SEMICOLON  shift, and go to state 7
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types                go to state 19
+    specialExpr               go to state 20
+    notExpression             go to state 21
+    signExpression            go to state 22
+    multiplicativeExpression  go to state 23
+    additiveExpression        go to state 24
+    relationalExpression      go to state 25
+    logicalAndExpression      go to state 26
+    expression                go to state 53
 
 
-State 6
+State 34
 
-    3 expr: . TK_INT
-    4     | . TK_REAL
-    5     | . expr OP_PLUS expr
-    5     | expr OP_PLUS . expr
+    9 notExpression: KW_NOT signExpression .
 
-    TK_INT   shift, and go to state 3
-    TK_REAL  shift, and go to state 4
-
-    expr  go to state 8
+    $default  reduce using rule 9 (notExpression)
 
 
-State 7
+State 35
 
-    2 input: input expr DEL_SEMICOLON .
+   11 signExpression: OP_PLUS notExpression .
 
-    $default  reduce using rule 2 (input)
+    $default  reduce using rule 11 (signExpression)
 
 
-State 8
+State 36
 
-    5 expr: expr . OP_PLUS expr
-    5     | expr OP_PLUS expr .  [OP_PLUS, DEL_SEMICOLON]
+   12 signExpression: OP_MINUS notExpression .
 
-    $default  reduce using rule 5 (expr)
+    $default  reduce using rule 12 (signExpression)
 
-    Conflict between rule 5 and token OP_PLUS resolved as reduce (%left OP_PLUS).
+
+State 37
+
+    7 specialExpr: DEL_LEFT_PARENTESIS expression . DEL_RIGHT_PARENTESIS
+
+    DEL_RIGHT_PARENTESIS  shift, and go to state 54
+
+
+State 38
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   14 multiplicativeExpression: multiplicativeExpression OP_MUL . signExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types      go to state 19
+    specialExpr     go to state 20
+    notExpression   go to state 21
+    signExpression  go to state 55
+
+
+State 39
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   15 multiplicativeExpression: multiplicativeExpression OP_DIV . signExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types      go to state 19
+    specialExpr     go to state 20
+    notExpression   go to state 21
+    signExpression  go to state 56
+
+
+State 40
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   16 multiplicativeExpression: multiplicativeExpression OP_MOD . signExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types      go to state 19
+    specialExpr     go to state 20
+    notExpression   go to state 21
+    signExpression  go to state 57
+
+
+State 41
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   13 multiplicativeExpression: . signExpression
+   14                         | . multiplicativeExpression OP_MUL signExpression
+   15                         | . multiplicativeExpression OP_DIV signExpression
+   16                         | . multiplicativeExpression OP_MOD signExpression
+   18 additiveExpression: additiveExpression OP_PLUS . multiplicativeExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types                go to state 19
+    specialExpr               go to state 20
+    notExpression             go to state 21
+    signExpression            go to state 22
+    multiplicativeExpression  go to state 58
+
+
+State 42
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   13 multiplicativeExpression: . signExpression
+   14                         | . multiplicativeExpression OP_MUL signExpression
+   15                         | . multiplicativeExpression OP_DIV signExpression
+   16                         | . multiplicativeExpression OP_MOD signExpression
+   19 additiveExpression: additiveExpression OP_MINUS . multiplicativeExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types                go to state 19
+    specialExpr               go to state 20
+    notExpression             go to state 21
+    signExpression            go to state 22
+    multiplicativeExpression  go to state 59
+
+
+State 43
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   13 multiplicativeExpression: . signExpression
+   14                         | . multiplicativeExpression OP_MUL signExpression
+   15                         | . multiplicativeExpression OP_DIV signExpression
+   16                         | . multiplicativeExpression OP_MOD signExpression
+   17 additiveExpression: . multiplicativeExpression
+   18                   | . additiveExpression OP_PLUS multiplicativeExpression
+   19                   | . additiveExpression OP_MINUS multiplicativeExpression
+   21 relationalExpression: relationalExpression OP_EQUALS . additiveExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types                go to state 19
+    specialExpr               go to state 20
+    notExpression             go to state 21
+    signExpression            go to state 22
+    multiplicativeExpression  go to state 23
+    additiveExpression        go to state 60
+
+
+State 44
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   13 multiplicativeExpression: . signExpression
+   14                         | . multiplicativeExpression OP_MUL signExpression
+   15                         | . multiplicativeExpression OP_DIV signExpression
+   16                         | . multiplicativeExpression OP_MOD signExpression
+   17 additiveExpression: . multiplicativeExpression
+   18                   | . additiveExpression OP_PLUS multiplicativeExpression
+   19                   | . additiveExpression OP_MINUS multiplicativeExpression
+   22 relationalExpression: relationalExpression OP_NOT_EQUALS . additiveExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types                go to state 19
+    specialExpr               go to state 20
+    notExpression             go to state 21
+    signExpression            go to state 22
+    multiplicativeExpression  go to state 23
+    additiveExpression        go to state 61
+
+
+State 45
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   13 multiplicativeExpression: . signExpression
+   14                         | . multiplicativeExpression OP_MUL signExpression
+   15                         | . multiplicativeExpression OP_DIV signExpression
+   16                         | . multiplicativeExpression OP_MOD signExpression
+   17 additiveExpression: . multiplicativeExpression
+   18                   | . additiveExpression OP_PLUS multiplicativeExpression
+   19                   | . additiveExpression OP_MINUS multiplicativeExpression
+   23 relationalExpression: relationalExpression OP_SMALLER . additiveExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types                go to state 19
+    specialExpr               go to state 20
+    notExpression             go to state 21
+    signExpression            go to state 22
+    multiplicativeExpression  go to state 23
+    additiveExpression        go to state 62
+
+
+State 46
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   13 multiplicativeExpression: . signExpression
+   14                         | . multiplicativeExpression OP_MUL signExpression
+   15                         | . multiplicativeExpression OP_DIV signExpression
+   16                         | . multiplicativeExpression OP_MOD signExpression
+   17 additiveExpression: . multiplicativeExpression
+   18                   | . additiveExpression OP_PLUS multiplicativeExpression
+   19                   | . additiveExpression OP_MINUS multiplicativeExpression
+   24 relationalExpression: relationalExpression OP_SMALLER_EQUALS . additiveExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types                go to state 19
+    specialExpr               go to state 20
+    notExpression             go to state 21
+    signExpression            go to state 22
+    multiplicativeExpression  go to state 23
+    additiveExpression        go to state 63
+
+
+State 47
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   13 multiplicativeExpression: . signExpression
+   14                         | . multiplicativeExpression OP_MUL signExpression
+   15                         | . multiplicativeExpression OP_DIV signExpression
+   16                         | . multiplicativeExpression OP_MOD signExpression
+   17 additiveExpression: . multiplicativeExpression
+   18                   | . additiveExpression OP_PLUS multiplicativeExpression
+   19                   | . additiveExpression OP_MINUS multiplicativeExpression
+   20 relationalExpression: . additiveExpression
+   21                     | . relationalExpression OP_EQUALS additiveExpression
+   22                     | . relationalExpression OP_NOT_EQUALS additiveExpression
+   23                     | . relationalExpression OP_SMALLER additiveExpression
+   24                     | . relationalExpression OP_SMALLER_EQUALS additiveExpression
+   27 logicalAndExpression: logicalAndExpression KW_AND . relationalExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types                go to state 19
+    specialExpr               go to state 20
+    notExpression             go to state 21
+    signExpression            go to state 22
+    multiplicativeExpression  go to state 23
+    additiveExpression        go to state 24
+    relationalExpression      go to state 64
+
+
+State 48
+
+    1 data_types: . TK_IDENT
+    2           | . TK_INT
+    3           | . TK_REAL
+    4           | . TK_STRING
+    5 specialExpr: . data_types
+    6            | . TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS
+    7            | . DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS
+    8 notExpression: . specialExpr
+    9              | . KW_NOT signExpression
+   10 signExpression: . notExpression
+   11               | . OP_PLUS notExpression
+   12               | . OP_MINUS notExpression
+   13 multiplicativeExpression: . signExpression
+   14                         | . multiplicativeExpression OP_MUL signExpression
+   15                         | . multiplicativeExpression OP_DIV signExpression
+   16                         | . multiplicativeExpression OP_MOD signExpression
+   17 additiveExpression: . multiplicativeExpression
+   18                   | . additiveExpression OP_PLUS multiplicativeExpression
+   19                   | . additiveExpression OP_MINUS multiplicativeExpression
+   20 relationalExpression: . additiveExpression
+   21                     | . relationalExpression OP_EQUALS additiveExpression
+   22                     | . relationalExpression OP_NOT_EQUALS additiveExpression
+   23                     | . relationalExpression OP_SMALLER additiveExpression
+   24                     | . relationalExpression OP_SMALLER_EQUALS additiveExpression
+   26 logicalAndExpression: logicalAndExpression KW_OR . relationalExpression
+
+    TK_IDENT             shift, and go to state 11
+    TK_INT               shift, and go to state 12
+    TK_REAL              shift, and go to state 13
+    TK_STRING            shift, and go to state 14
+    KW_NOT               shift, and go to state 15
+    OP_PLUS              shift, and go to state 16
+    OP_MINUS             shift, and go to state 17
+    DEL_LEFT_PARENTESIS  shift, and go to state 18
+
+    data_types                go to state 19
+    specialExpr               go to state 20
+    notExpression             go to state 21
+    signExpression            go to state 22
+    multiplicativeExpression  go to state 23
+    additiveExpression        go to state 24
+    relationalExpression      go to state 65
+
+
+State 49
+
+   29 __statement: . TK_IDENT OP_ASSIGN expression DEL_SEMICOLON
+   30            | . __selection
+   31            | . __iteration
+   32            | . __return
+   33 __selection: . KW_IF expression KW_THEN __statement KW_FI DEL_SEMICOLON
+   33            | KW_IF expression KW_THEN . __statement KW_FI DEL_SEMICOLON
+   34            | . KW_IF expression KW_THEN __statement KW_ELSE __statement KW_FI DEL_SEMICOLON
+   34            | KW_IF expression KW_THEN . __statement KW_ELSE __statement KW_FI DEL_SEMICOLON
+   35 __iteration: . KW_WHILE expression KW_LOOP __statement KW_POOL DEL_SEMICOLON
+   36 __return: . KW_RETURN DEL_SEMICOLON
+   37         | . KW_RETURN expression DEL_SEMICOLON
+
+    TK_IDENT   shift, and go to state 1
+    KW_IF      shift, and go to state 2
+    KW_WHILE   shift, and go to state 3
+    KW_RETURN  shift, and go to state 4
+
+    __statement  go to state 66
+    __selection  go to state 6
+    __iteration  go to state 7
+    __return     go to state 8
+
+
+State 50
+
+   29 __statement: . TK_IDENT OP_ASSIGN expression DEL_SEMICOLON
+   30            | . __selection
+   31            | . __iteration
+   32            | . __return
+   33 __selection: . KW_IF expression KW_THEN __statement KW_FI DEL_SEMICOLON
+   34            | . KW_IF expression KW_THEN __statement KW_ELSE __statement KW_FI DEL_SEMICOLON
+   35 __iteration: . KW_WHILE expression KW_LOOP __statement KW_POOL DEL_SEMICOLON
+   35            | KW_WHILE expression KW_LOOP . __statement KW_POOL DEL_SEMICOLON
+   36 __return: . KW_RETURN DEL_SEMICOLON
+   37         | . KW_RETURN expression DEL_SEMICOLON
+
+    TK_IDENT   shift, and go to state 1
+    KW_IF      shift, and go to state 2
+    KW_WHILE   shift, and go to state 3
+    KW_RETURN  shift, and go to state 4
+
+    __statement  go to state 67
+    __selection  go to state 6
+    __iteration  go to state 7
+    __return     go to state 8
+
+
+State 51
+
+   37 __return: KW_RETURN expression DEL_SEMICOLON .
+
+    $default  reduce using rule 37 (__return)
+
+
+State 52
+
+   29 __statement: TK_IDENT OP_ASSIGN expression DEL_SEMICOLON .
+
+    $default  reduce using rule 29 (__statement)
+
+
+State 53
+
+    6 specialExpr: TK_IDENT DEL_LEFT_BRACKETS expression . DEL_RIGHT_BRACKETS
+
+    DEL_RIGHT_BRACKETS  shift, and go to state 68
+
+
+State 54
+
+    7 specialExpr: DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS .
+
+    $default  reduce using rule 7 (specialExpr)
+
+
+State 55
+
+   14 multiplicativeExpression: multiplicativeExpression OP_MUL signExpression .
+
+    $default  reduce using rule 14 (multiplicativeExpression)
+
+
+State 56
+
+   15 multiplicativeExpression: multiplicativeExpression OP_DIV signExpression .
+
+    $default  reduce using rule 15 (multiplicativeExpression)
+
+
+State 57
+
+   16 multiplicativeExpression: multiplicativeExpression OP_MOD signExpression .
+
+    $default  reduce using rule 16 (multiplicativeExpression)
+
+
+State 58
+
+   14 multiplicativeExpression: multiplicativeExpression . OP_MUL signExpression
+   15                         | multiplicativeExpression . OP_DIV signExpression
+   16                         | multiplicativeExpression . OP_MOD signExpression
+   18 additiveExpression: additiveExpression OP_PLUS multiplicativeExpression .  [KW_THEN, KW_LOOP, KW_AND, KW_OR, OP_PLUS, OP_MINUS, OP_EQUALS, OP_NOT_EQUALS, OP_SMALLER, OP_SMALLER_EQUALS, DEL_SEMICOLON, DEL_RIGHT_PARENTESIS, DEL_RIGHT_BRACKETS]
+
+    OP_MUL  shift, and go to state 38
+    OP_DIV  shift, and go to state 39
+    OP_MOD  shift, and go to state 40
+
+    $default  reduce using rule 18 (additiveExpression)
+
+
+State 59
+
+   14 multiplicativeExpression: multiplicativeExpression . OP_MUL signExpression
+   15                         | multiplicativeExpression . OP_DIV signExpression
+   16                         | multiplicativeExpression . OP_MOD signExpression
+   19 additiveExpression: additiveExpression OP_MINUS multiplicativeExpression .  [KW_THEN, KW_LOOP, KW_AND, KW_OR, OP_PLUS, OP_MINUS, OP_EQUALS, OP_NOT_EQUALS, OP_SMALLER, OP_SMALLER_EQUALS, DEL_SEMICOLON, DEL_RIGHT_PARENTESIS, DEL_RIGHT_BRACKETS]
+
+    OP_MUL  shift, and go to state 38
+    OP_DIV  shift, and go to state 39
+    OP_MOD  shift, and go to state 40
+
+    $default  reduce using rule 19 (additiveExpression)
+
+
+State 60
+
+   18 additiveExpression: additiveExpression . OP_PLUS multiplicativeExpression
+   19                   | additiveExpression . OP_MINUS multiplicativeExpression
+   21 relationalExpression: relationalExpression OP_EQUALS additiveExpression .  [KW_THEN, KW_LOOP, KW_AND, KW_OR, OP_EQUALS, OP_NOT_EQUALS, OP_SMALLER, OP_SMALLER_EQUALS, DEL_SEMICOLON, DEL_RIGHT_PARENTESIS, DEL_RIGHT_BRACKETS]
+
+    OP_PLUS   shift, and go to state 41
+    OP_MINUS  shift, and go to state 42
+
+    $default  reduce using rule 21 (relationalExpression)
+
+
+State 61
+
+   18 additiveExpression: additiveExpression . OP_PLUS multiplicativeExpression
+   19                   | additiveExpression . OP_MINUS multiplicativeExpression
+   22 relationalExpression: relationalExpression OP_NOT_EQUALS additiveExpression .  [KW_THEN, KW_LOOP, KW_AND, KW_OR, OP_EQUALS, OP_NOT_EQUALS, OP_SMALLER, OP_SMALLER_EQUALS, DEL_SEMICOLON, DEL_RIGHT_PARENTESIS, DEL_RIGHT_BRACKETS]
+
+    OP_PLUS   shift, and go to state 41
+    OP_MINUS  shift, and go to state 42
+
+    $default  reduce using rule 22 (relationalExpression)
+
+
+State 62
+
+   18 additiveExpression: additiveExpression . OP_PLUS multiplicativeExpression
+   19                   | additiveExpression . OP_MINUS multiplicativeExpression
+   23 relationalExpression: relationalExpression OP_SMALLER additiveExpression .  [KW_THEN, KW_LOOP, KW_AND, KW_OR, OP_EQUALS, OP_NOT_EQUALS, OP_SMALLER, OP_SMALLER_EQUALS, DEL_SEMICOLON, DEL_RIGHT_PARENTESIS, DEL_RIGHT_BRACKETS]
+
+    OP_PLUS   shift, and go to state 41
+    OP_MINUS  shift, and go to state 42
+
+    $default  reduce using rule 23 (relationalExpression)
+
+
+State 63
+
+   18 additiveExpression: additiveExpression . OP_PLUS multiplicativeExpression
+   19                   | additiveExpression . OP_MINUS multiplicativeExpression
+   24 relationalExpression: relationalExpression OP_SMALLER_EQUALS additiveExpression .  [KW_THEN, KW_LOOP, KW_AND, KW_OR, OP_EQUALS, OP_NOT_EQUALS, OP_SMALLER, OP_SMALLER_EQUALS, DEL_SEMICOLON, DEL_RIGHT_PARENTESIS, DEL_RIGHT_BRACKETS]
+
+    OP_PLUS   shift, and go to state 41
+    OP_MINUS  shift, and go to state 42
+
+    $default  reduce using rule 24 (relationalExpression)
+
+
+State 64
+
+   21 relationalExpression: relationalExpression . OP_EQUALS additiveExpression
+   22                     | relationalExpression . OP_NOT_EQUALS additiveExpression
+   23                     | relationalExpression . OP_SMALLER additiveExpression
+   24                     | relationalExpression . OP_SMALLER_EQUALS additiveExpression
+   27 logicalAndExpression: logicalAndExpression KW_AND relationalExpression .  [KW_THEN, KW_LOOP, KW_AND, KW_OR, DEL_SEMICOLON, DEL_RIGHT_PARENTESIS, DEL_RIGHT_BRACKETS]
+
+    OP_EQUALS          shift, and go to state 43
+    OP_NOT_EQUALS      shift, and go to state 44
+    OP_SMALLER         shift, and go to state 45
+    OP_SMALLER_EQUALS  shift, and go to state 46
+
+    $default  reduce using rule 27 (logicalAndExpression)
+
+
+State 65
+
+   21 relationalExpression: relationalExpression . OP_EQUALS additiveExpression
+   22                     | relationalExpression . OP_NOT_EQUALS additiveExpression
+   23                     | relationalExpression . OP_SMALLER additiveExpression
+   24                     | relationalExpression . OP_SMALLER_EQUALS additiveExpression
+   26 logicalAndExpression: logicalAndExpression KW_OR relationalExpression .  [KW_THEN, KW_LOOP, KW_AND, KW_OR, DEL_SEMICOLON, DEL_RIGHT_PARENTESIS, DEL_RIGHT_BRACKETS]
+
+    OP_EQUALS          shift, and go to state 43
+    OP_NOT_EQUALS      shift, and go to state 44
+    OP_SMALLER         shift, and go to state 45
+    OP_SMALLER_EQUALS  shift, and go to state 46
+
+    $default  reduce using rule 26 (logicalAndExpression)
+
+
+State 66
+
+   33 __selection: KW_IF expression KW_THEN __statement . KW_FI DEL_SEMICOLON
+   34            | KW_IF expression KW_THEN __statement . KW_ELSE __statement KW_FI DEL_SEMICOLON
+
+    KW_ELSE  shift, and go to state 69
+    KW_FI    shift, and go to state 70
+
+
+State 67
+
+   35 __iteration: KW_WHILE expression KW_LOOP __statement . KW_POOL DEL_SEMICOLON
+
+    KW_POOL  shift, and go to state 71
+
+
+State 68
+
+    6 specialExpr: TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS .
+
+    $default  reduce using rule 6 (specialExpr)
+
+
+State 69
+
+   29 __statement: . TK_IDENT OP_ASSIGN expression DEL_SEMICOLON
+   30            | . __selection
+   31            | . __iteration
+   32            | . __return
+   33 __selection: . KW_IF expression KW_THEN __statement KW_FI DEL_SEMICOLON
+   34            | . KW_IF expression KW_THEN __statement KW_ELSE __statement KW_FI DEL_SEMICOLON
+   34            | KW_IF expression KW_THEN __statement KW_ELSE . __statement KW_FI DEL_SEMICOLON
+   35 __iteration: . KW_WHILE expression KW_LOOP __statement KW_POOL DEL_SEMICOLON
+   36 __return: . KW_RETURN DEL_SEMICOLON
+   37         | . KW_RETURN expression DEL_SEMICOLON
+
+    TK_IDENT   shift, and go to state 1
+    KW_IF      shift, and go to state 2
+    KW_WHILE   shift, and go to state 3
+    KW_RETURN  shift, and go to state 4
+
+    __statement  go to state 72
+    __selection  go to state 6
+    __iteration  go to state 7
+    __return     go to state 8
+
+
+State 70
+
+   33 __selection: KW_IF expression KW_THEN __statement KW_FI . DEL_SEMICOLON
+
+    DEL_SEMICOLON  shift, and go to state 73
+
+
+State 71
+
+   35 __iteration: KW_WHILE expression KW_LOOP __statement KW_POOL . DEL_SEMICOLON
+
+    DEL_SEMICOLON  shift, and go to state 74
+
+
+State 72
+
+   34 __selection: KW_IF expression KW_THEN __statement KW_ELSE __statement . KW_FI DEL_SEMICOLON
+
+    KW_FI  shift, and go to state 75
+
+
+State 73
+
+   33 __selection: KW_IF expression KW_THEN __statement KW_FI DEL_SEMICOLON .
+
+    $default  reduce using rule 33 (__selection)
+
+
+State 74
+
+   35 __iteration: KW_WHILE expression KW_LOOP __statement KW_POOL DEL_SEMICOLON .
+
+    $default  reduce using rule 35 (__iteration)
+
+
+State 75
+
+   34 __selection: KW_IF expression KW_THEN __statement KW_ELSE __statement KW_FI . DEL_SEMICOLON
+
+    DEL_SEMICOLON  shift, and go to state 76
+
+
+State 76
+
+   34 __selection: KW_IF expression KW_THEN __statement KW_ELSE __statement KW_FI DEL_SEMICOLON .
+
+    $default  reduce using rule 34 (__selection)
