@@ -92,6 +92,8 @@ extern int lineNum;
 //%type <crepr> logicalOrExpression
 %type <crepr> expression
 
+
+
 // %type <crepr> statement
 // %type <crepr> begin_end_statement
 // %type <crepr> expression_statement
@@ -101,46 +103,53 @@ extern int lineNum;
 // %type <crepr> loop_statement
 // %type <crepr> statement_list
 // %type <crepr> declaration_list
+
+//FINAL
+%type <crepr> __statement_list
 %type <crepr> __statement
 %type <crepr> __selection 
 %type <crepr> __iteration
 %type <crepr> __return
 
-%type <crepr> declaration
-%type <crepr> declaration_specifiers
-%type <crepr> init_declarator
-%type <crepr> type_specifier
-%type <crepr> declarator
-%type <crepr> parameter_list
-%type <crepr> array_declare
-%type <crepr> declaration_list
+// %type <crepr> declaration
+// %type <crepr> declaration_specifiers
+// %type <crepr> init_declarator
+// %type <crepr> type_specifier
+// %type <crepr> declarator
+// %type <crepr> parameter_list
+// %type <crepr> array_declare
+// %type <crepr> declaration_list
 // %type <crepr> translation_unit
 // %type <crepr> global_declaration
 // %type <crepr> function_declaration
 // %type <crepr> program
+%type <crepr> func_list
+%type <crepr> func_list_empty
+%type <crepr> func_param
+%type <crepr> func_ret
+%type <crepr> func_param_empty
+%type <crepr> func_param_list
+
+%type <crepr> decl_list
+%type <crepr> decl
+%type <crepr> const_decl_body
+%type <crepr> const_decl_list
+%type <crepr> const_decl_init
+%type <crepr> let_decl_body
+%type <crepr> let_decl_list
+%type <crepr> let_decl_init
+%type <crepr> decl_id
+%type <crepr> type_spec
+
 
 
 //TODO CHANGE THAT %start input
 %type <crepr> input
 %start input
 
-//%start program
-
-//%type <crepr> expr
 
 %%
 
-//TODO INIT COMMIT
-// input:  
-//   %empty
-// | expression 
-// { 
-//   if (yyerror_count == 0) {
-//     puts(c_prologue);
-//     //printf("Expression evaluates to: %s\n", $2); 
-//   }  
-// }
-// ;
 
 
 //EXPRESION SECTION IS DONE TODO MAYBE SOMETHING IS WRONG WITH NOT.CHECK SEPERATELY
@@ -155,7 +164,7 @@ data_types
   ;
 
 
-//TODO ADD FUNCTION
+// //TODO ADD FUNCTION
 specialExpr
   : data_types
   | TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS              { $$ = template("%s[%s]",$1,$3); }
@@ -213,10 +222,18 @@ expression
   : logicalAndExpression
   ;
 
+
+
 //TODO THIS SECTION NEEDS SOME WORK
 /*******************************************************************
 * Statements
 *******************************************************************/
+
+__statement_list
+  //: %empty          
+  : __statement_list __statement { $$ = template("%s\n%s", $1, $2); }
+  | __statement { $$ = template("%s\n", $1); }
+  ;
 
 __statement
   //: __mainbody       { $$ = template("%s",$1); }
@@ -263,20 +280,22 @@ __statement
 
 //TODO THIS IS THE RIGHT
 __selection
-  : KW_IF expression KW_THEN __statement KW_FI DEL_SEMICOLON                     { $$ = template("if %s then\n %s \nfi;\n",$2,$4); }
-  | KW_IF expression KW_THEN __statement KW_ELSE __statement KW_FI DEL_SEMICOLON   { $$ = template("if %s then\n %s \nelse\n %s fi;\n",$2,$4,$6); }
+  : KW_IF expression KW_THEN __statement_list KW_FI DEL_SEMICOLON                     { $$ = template("if %s then\n %s \nfi;\n",$2,$4); }
+  | KW_IF expression KW_THEN __statement_list KW_ELSE __statement KW_FI DEL_SEMICOLON   { $$ = template("if %s then\n %s \nelse\n %s fi;\n",$2,$4,$6); }
   ;
 
 __iteration
-  : KW_WHILE expression KW_LOOP __statement KW_POOL DEL_SEMICOLON { $$ = template("while %s loop\n %s \npool;\n",$2,$4); }
+  : KW_WHILE expression KW_LOOP __statement_list KW_POOL DEL_SEMICOLON { $$ = template("while %s loop\n %s \npool;\n",$2,$4); }
   ;
 
 __return
   : KW_RETURN DEL_SEMICOLON               { $$ = template("return;"); }
   | KW_RETURN expression DEL_SEMICOLON { $$ = template("return %s;",$2); }
-// __assign
-//   : TK_IDENT OP_ASSIGN expression
+
   
+
+
+
 
 
 /*******************************************************************
@@ -284,20 +303,22 @@ __return
 *******************************************************************/
 
 input
-      : %empty                        {$$ = template("");}
-      | __statement              
+      //: %empty                        {$$ = template("");}
+      : decl_list func_list_empty               
       { 
           $$ = template("%s",$1); 
           if (yyerror_count == 0) 
           {
                 printf("\n********************** C Code ********************** \n");
                 printf("\n%s\n", $1);
+                printf("%s\n",$2);
                 printf("\n********************** C Code ********************** \n");
                 printf("\nSaving code in output.c for further use.\n");
                      FILE *fp = fopen("output.c","w");
                      fputs("#include <stdio.h>\n",fp);
             fputs(c_prologue,fp);
-                fprintf(fp,"%s", $1); 
+                fprintf(fp,"%s\n", $1);
+                fprintf(fp,"%s", $2);  
       fclose(fp);               
           }
           else
@@ -343,45 +364,45 @@ input
 /*
  * The main type of specifiers as defined from assignment
  */
-type_specifier
-  : KW_INT    { $$ = template("%s", "int"); }
-  | KW_BOOL    { $$ = template("%s", "bool"); }
-  | KW_REAL   { $$ = template("%s", "real"); }
-  | KW_STRING     { $$ = template("%s", "string"); }
-  ;
+// type_specifier
+//   : KW_INT    { $$ = template("%s", "int"); }
+//   | KW_BOOL    { $$ = template("%s", "bool"); }
+//   | KW_REAL   { $$ = template("%s", "real"); }
+//   | KW_STRING     { $$ = template("%s", "string"); }
+//   ;
 
-parameter_list
-  : declaration_specifiers declarator                    { $$ = template("%s %s",$1,$2); }
-  | parameter_list DEL_COMMA declaration_specifiers declarator      { $$ = template("%s,%s %s",$1,$3,$4); }
-  | parameter_list DEL_COMMA declaration_specifiers       { $$ = template("%s,%s",$1,$3); }
-  ;
+// parameter_list
+//   : declaration_specifiers declarator                    { $$ = template("%s %s",$1,$2); }
+//   | parameter_list DEL_COMMA declaration_specifiers declarator      { $$ = template("%s,%s %s",$1,$3,$4); }
+//   | parameter_list DEL_COMMA declaration_specifiers       { $$ = template("%s,%s",$1,$3); }
+//   ;
 
-declarator
-  : TK_IDENT                                                      { $$ = template("%s",$1); }
-  | TK_IDENT DEL_LEFT_PARENTESIS DEL_RIGHT_PARENTESIS                                   { $$ = template("%s()",$1); }
-  | TK_IDENT DEL_LEFT_PARENTESIS parameter_list DEL_RIGHT_PARENTESIS                    { $$ = template("%s(%s)",$1,$3); }
-  | TK_IDENT DEL_LEFT_BRACKETS operation_expression DEL_RIGHT_BRACKETS array_declare  { $$ = template("%s[%s]%s",$1,$3,$5); } 
- ; 
+// declarator
+//   : TK_IDENT                                                      { $$ = template("%s",$1); }
+//   | TK_IDENT DEL_LEFT_PARENTESIS DEL_RIGHT_PARENTESIS                                   { $$ = template("%s()",$1); }
+//   | TK_IDENT DEL_LEFT_PARENTESIS parameter_list DEL_RIGHT_PARENTESIS                    { $$ = template("%s(%s)",$1,$3); }
+//   | TK_IDENT DEL_LEFT_BRACKETS operation_expression DEL_RIGHT_BRACKETS array_declare  { $$ = template("%s[%s]%s",$1,$3,$5); } 
+//  ; 
 
-array_declare
-  : %empty                                             { $$ = template(""); }
-  //| DEL_LEFT_BRACKETS operation_expression DEL_RIGHT_BRACKETS array_declare       { $$ = template("[%s]%s",$2,$4); }
-  ;
+// array_declare
+//   : %empty                                             { $$ = template(""); }
+//   //| DEL_LEFT_BRACKETS operation_expression DEL_RIGHT_BRACKETS array_declare       { $$ = template("[%s]%s",$2,$4); }
+//   ;
   
-init_declarator
-  : declarator                                             { $$ = template("%s",$1); }
-  //| declarator OP_ASSIGN assignment_expression         { $$ = template("%s<-%s",$1,$3); }
-  | init_declarator DEL_COMMA init_declarator               { $$ = template("%s,%s",$1,$3); }  
-  ;  
+// init_declarator
+//   : declarator                                             { $$ = template("%s",$1); }
+//   //| declarator OP_ASSIGN assignment_expression         { $$ = template("%s<-%s",$1,$3); }
+//   | init_declarator DEL_COMMA init_declarator               { $$ = template("%s,%s",$1,$3); }  
+//   ;  
 
-declaration_specifiers
-  : KW_CONST                    { $$ = template("const"); }
-  | KW_LET                      { $$ = template("let"); }
-  ;
+// declaration_specifiers
+//   : KW_CONST                    { $$ = template("const"); }
+//   | KW_LET                      { $$ = template("let"); }
+//   ;
 
-declaration
-  : declaration_specifiers init_declarator DEL_SEMICOLON      { $$ = template("%s %s;\n", $1,$2); }
-  ;
+// declaration
+//   : declaration_specifiers init_declarator DEL_SEMICOLON      { $$ = template("%s %s;\n", $1,$2); }
+//   ;
 
 
 
@@ -428,6 +449,99 @@ declaration
 
 
 
+//TODO VARIABLE DECLARATION IS DONE. ADD EMPTY
+
+decl_list
+  //: %empty          
+  : decl_list decl { $$ = template("%s\n%s", $1, $2); }
+  | decl { $$ = template("%s\n", $1); }
+  ;
+
+//TODO ADD LET
+decl
+  : KW_LET let_decl_body { $$ = template("let %s\n", $2); }
+  | KW_CONST const_decl_body { $$ = template("const %s\n", $2); }
+  ;
+
+const_decl_body
+  : const_decl_list DEL_COLON type_spec DEL_SEMICOLON {  $$ = template("%s : %s;", $3, $1); }
+  ;
+
+const_decl_list
+  : const_decl_list DEL_COMMA const_decl_init { $$ = template("%s, %s", $1, $3 );}
+  | const_decl_init
+  ;
+
+const_decl_init
+  :  decl_id OP_ASSIGN data_types { $$ = template("%s<-%s", $1, $3); }
+  ; 
+
+
+
+let_decl_body
+  : let_decl_list DEL_COLON type_spec DEL_SEMICOLON {  $$ = template("%s : %s;", $3, $1); }
+  ;
+
+let_decl_list
+  : let_decl_list DEL_COMMA let_decl_init { $$ = template("%s, %s", $1, $3 );}
+  | let_decl_init
+  ;
+
+let_decl_init
+  : decl_id
+  | decl_id OP_ASSIGN data_types { $$ = template("%s<-%s", $1, $3); }
+  ; 
+
+/*
+ * Array declaration must be a positive integer number. Valid example test[2]. We also allow array initialization
+ */
+decl_id
+  : TK_IDENT { $$ = template("%s", $1); }
+  //| DEL_LEFT_PARENTESIS decl_id DEL_COLON type_spec DEL_RIGHT_PARENTESIS{ $$ = template("(%s : %s)", $2,$4); }
+  | TK_IDENT DEL_LEFT_BRACKETS TK_INT DEL_RIGHT_BRACKETS { $$ = template("%s[%s]", $1, $3); }
+  //| DEL_LEFT_PARENTESIS decl_id DEL_COLON type_spec DEL_RIGHT_PARENTESIS{ $$ = template("(%s : %s)", $2,$4); }
+  //| DEL_LEFT_PARENTESIS TK_IDENT DEL_COLON type_spec DEL_RIGHT_PARENTESIS{ $$ = template("(%s : %s)", $2,$4); }
+  ;
+
+type_spec
+  : KW_INT    { $$ = template("%s", "int"); }
+  | KW_BOOL    { $$ = template("%s", "bool"); }
+  | KW_REAL   { $$ = template("%s", "real"); }
+  | KW_STRING     { $$ = template("%s", "string"); }
+  ;
+
+/*
+ * Function declaration
+ */
+func_list_empty
+  : %empty {$$ = template("");}
+  | func_list
+  ;
+
+
+//TODO ADD SEMICOLON
+func_list
+  : KW_CONST decl_id OP_ASSIGN DEL_LEFT_PARENTESIS func_param_empty DEL_RIGHT_PARENTESIS DEL_COLON func_ret OP_ARROW DEL_LEFT_CURLY_BRACKETS __statement_list  DEL_RIGHT_CURLY_BRACKETS func_list { $$ = template("const %s <- (%s) : %s =>{\n%s\n}\n %s", $2, $5, $8, $11, $13); }
+  | KW_CONST decl_id OP_ASSIGN DEL_LEFT_PARENTESIS func_param_empty DEL_RIGHT_PARENTESIS DEL_COLON func_ret OP_ARROW DEL_LEFT_CURLY_BRACKETS __statement_list  DEL_RIGHT_CURLY_BRACKETS { $$ = template("const %s <- (%s) : %s =>{\n%s\n}\n", $2, $5, $8, $11); }
+  ;
+
+func_param_empty
+  : %empty                             { $$ = template("");}
+  | func_param_list DEL_COLON type_spec     { $$ = template("%s : %s", $1,$3); }
+
+func_param_list
+  : func_param                            { $$ = template("%s", $1);}
+  | func_param_empty DEL_COMMA func_param     { $$ = template("%s , %s", $1,$3); }
+
+func_param
+  : TK_IDENT { $$ = template("%s", $1); }
+  | TK_IDENT DEL_LEFT_BRACKETS DEL_RIGHT_BRACKETS { $$ = template("%s[]", $1); }
+  ;
+
+func_ret
+  : type_spec { $$ = template("%s", $1); }
+  | DEL_LEFT_BRACKETS DEL_RIGHT_BRACKETS type_spec { $$ = template("[] %s", $3); }
+  ;
 
 %%
 int main () {

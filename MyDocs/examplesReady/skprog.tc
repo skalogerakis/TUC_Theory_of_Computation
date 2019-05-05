@@ -2,7 +2,7 @@
 -- sdf(a+1) % cube(b+3)
 --a + b[(k +1)*2]
 --q[(s + 2)]
-return ;
+--return ;
 --while not 2 loop
 --	y <- x+ 5;
 --	y <- x+ 5;
@@ -16,3 +16,29 @@ return ;
 --	fi;
 
 --fi;
+
+let test[24] <- 7, x <- 5 : real;
+let we[2], x <- 5 : string;
+
+const takis <- (s[]: string, r: real, p: int, i[]: real) : [] real =>{
+	while not 2 loop
+		y <- x+ 5;
+
+		if v * r then 
+			y <- x+ 5;
+		fi;
+		
+		y <- x+ 5;
+	pool;
+
+	if v * r then 
+		y <- x+ 5;
+	fi;
+
+	e <- rw % 5;
+
+	return a * a ;
+}
+--const testaer <- 9 : int;
+
+--const x {y}
