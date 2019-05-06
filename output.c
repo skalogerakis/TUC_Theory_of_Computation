@@ -1,8 +1,37 @@
 #include <stdio.h>
 #include "teaclib.h"
 
-let test[24]<-7,x,rfw4: real;
- const we[2]<-9,x<-8: string;
- const makis() const start <- () : int =>{
-x
+const takis <- () : [] real =>{
+y <- x + 5;
+
+};
+ let real : test[5]<-7, x, rfw4;
+ const start <- () : int =>{
+let real : test[24];
+
+ const string : we[2]<-9;
+
+ while not 2 loop
+ y <- x + 5;
+ if v * r then
+ y <- x + 5;
+ 
+fi;
+
+ y <- x + 5;
+ 
+pool;
+
+ if v * r then
+ y <- x + 5;
+ 
+fi;
+
+ e <- rw %s;
+ talis(tsokailo / 3 , tso2);
+
+ talis();
+
+ return a * a;
+
 }

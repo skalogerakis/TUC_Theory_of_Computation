@@ -20,20 +20,26 @@
 
 
 
-let test[24] <- 7, x, rfw4 : real;
-const we[2]<-9, x<-8 : string;
-
-const makis()
-
-const start <- () : int =>{ x }
 
 
-const takis <- (s[]: string, r: real, p: int, i[]: real) : [] real =>{
-	x
-}
 
 
-(*const start <- () : int =>{
+--const start <- () : int =>{ x }
+
+
+const takis <- () : [] real =>{
+	y <- x+ 5;
+};
+
+let test[5] <- 7, x, rfw4 : real;
+--const we[2] : string;
+
+
+const start <- () : int =>{
+
+let test[24]: real;
+const we[2]<-9: string;
+
 	while not 2 loop
 		y <- x+ 5;
 
@@ -54,7 +60,7 @@ const takis <- (s[]: string, r: real, p: int, i[]: real) : [] real =>{
 	talis();
 
 	return a * a ;
-}*)
+}
 --const testaer <- 9 : int;
 
 --const x {y}

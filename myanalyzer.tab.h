@@ -97,9 +97,9 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 13 "myanalyzer.y" /* yacc.c:1909  */
+#line 12 "myanalyzer.y" /* yacc.c:1909  */
 
-	char* crepr;
+  char* crepr;
 
 #line 105 "myanalyzer.tab.h" /* yacc.c:1909  */
 };
