@@ -17,8 +17,9 @@
 
 --fi;
 
-let test[24] <- 7, x <- 5 : real;
-let we[2], x <- 5 : string;
+--let test[24] <- 7, x <- 5 : real;
+--const we[2]<-9, x <- 5 : string;
+
 
 const takis <- (s[]: string, r: real, p: int, i[]: real) : [] real =>{
 	while not 2 loop
@@ -37,8 +38,33 @@ const takis <- (s[]: string, r: real, p: int, i[]: real) : [] real =>{
 
 	e <- rw % 5;
 
+	talis(tsokailo / 3, tso2);
+
 	return a * a ;
 }
+
+
+(*const start <- () : int =>{
+	while not 2 loop
+		y <- x+ 5;
+
+		if v * r then 
+			y <- x+ 5;
+		fi;
+		
+		y <- x+ 5;
+	pool;
+
+	if v * r then 
+		y <- x+ 5;
+	fi;
+
+	e <- rw % 5;
+
+	talis(tsokailo / 3, tso2);
+
+	return a * a ;
+}*)
 --const testaer <- 9 : int;
 
 --const x {y}
