@@ -101,6 +101,7 @@ extern int lineNum;
 %type <crepr> __iteration
 %type <crepr> __return
 %type <crepr> __function
+//%type <crepr> __selectionBody
 %type <crepr> func_var_list
 
 %type <crepr> translation_unit
@@ -346,6 +347,8 @@ __statement_decl
 __statement
   : TK_IDENT OP_ASSIGN expression DEL_SEMICOLON         { $$ = template("%s = %s;",$1, $3); } 
   //| TK_IDENT OP_ASSIGN __fun DEL_SEMICOLON         { $$ = template("%s = %s;",$1, $3); }
+  //| 
+  //KW_FI DEL_SEMICOLON { $$ = template("\t}\n"); }
   | __selection      { $$ = template("%s",$1); }
   | __iteration           { $$ = template("%s",$1); }
   | __function        { $$ = template("%s",$1); }
@@ -359,8 +362,20 @@ __function
   
 
 __selection
-  : KW_IF expression KW_THEN __statement_empty KW_FI DEL_SEMICOLON                     { $$ = template("if(%s){\n%s\t}",$2,$4); }
-  | KW_IF expression KW_THEN __statement_empty KW_ELSE __statement_empty KW_FI DEL_SEMICOLON   { $$ = template("if(%s){\n%s\n\t}else{\n%s\t}",$2,$4,$6); }
+  : KW_FI DEL_SEMICOLON { $$ = template("\t}\n"); }
+  | KW_IF expression KW_THEN __statement_empty                     { $$ = template("if(%s){\n%s",$2,$4); }
+  | KW_IF expression KW_THEN __statement_empty KW_ELSE __statement_empty   { $$ = template("if(%s){\n%s\n\t}else{\n\t%s",$2,$4,$6); }
+
+
+
+  // KW_IF expression KW_THEN __statement_empty KW_FI DEL_SEMICOLON                     { $$ = template("if(%s){\n%s\t}",$2,$4); }
+  // | KW_IF expression KW_THEN __statement_empty KW_ELSE __statement_empty KW_FI DEL_SEMICOLON   { $$ = template("if(%s){\n%s\n\t}else{\n%s\t}",$2,$4,$6); }
+
+// __selectionBody
+//   : __statement_empty  { $$ = template("%s",$1); }
+  //| __statement_empty KW_FI DEL_SEMICOLON { $$ = template("%s",$1); }
+  //|
+
   // | KW_IF expression KW_THEN __statement_empty KW_ELSE KW_IF expression KW_THEN __statement_empty KW_THEN    { $$ = template("if(%s){\n%s\n\t}else if(%s){\n%s\t}",$2,$4,$7,$9); }
   //: KW_FI DEL_SEMICOLON { $$ = template("}"); }
   //| KW_IF expression KW_THEN __statement_empty                      { $$ = template("if(%s){\n%s\t",$2,$4); }

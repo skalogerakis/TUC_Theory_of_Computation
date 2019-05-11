@@ -82,9 +82,6 @@ let test[5] <- 7, x, rfw4 : real;
 *)
 
 
-
-
-
 -- File: prime.tc
 let limit, number, counter: int;
   
@@ -111,7 +108,7 @@ const prime <- (n: int): bool => {
       i <- i + 2;
     pool;
     result <- isPrime;
-  --fi;
+  fi;
   
   return result;
 };
