@@ -86,22 +86,11 @@ extern int lineNum;
 %type <crepr> multiplicativeExpression
 %type <crepr> additiveExpression
 %type <crepr> relationalExpression
-// %type <crepr> assignment_expression
-%type <crepr> logicalAndExpression
-//%type <crepr> logicalOrExpression
+
+%type <crepr> logicalExpressions
+
 %type <crepr> expression
 
-
-
-// %type <crepr> statement
-// %type <crepr> begin_end_statement
-// %type <crepr> expression_statement
-// %type <crepr> for_expression_statement
-// %type <crepr> if_statement
-// %type <crepr> jump_statement
-// %type <crepr> loop_statement
-// %type <crepr> statement_list
-// %type <crepr> declaration_list
 
 //FINAL
 %type <crepr> __statement_list
@@ -113,31 +102,23 @@ extern int lineNum;
 %type <crepr> __function
 %type <crepr> func_var_list
 
-// %type <crepr> declaration
-// %type <crepr> declaration_specifiers
-// %type <crepr> init_declarator
-// %type <crepr> type_specifier
-// %type <crepr> declarator
-// %type <crepr> parameter_list
-// %type <crepr> array_declare
-// %type <crepr> declaration_list
 %type <crepr> translation_unit
 %type <crepr> external_declaration
-//%type <crepr> global_declaration
-// %type <crepr> function_declaration
+
 
 //MYMAIN
-//%type <crepr> main_body
+%type <crepr> main_body
 
 
 %type <crepr> func_list
-//%type <crepr> func_list_empty
+
 %type <crepr> func_param
 %type <crepr> func_ret
+%type <crepr> func_main
 %type <crepr> func_param_empty
 %type <crepr> func_param_list
 
-//%type <crepr> decl_list
+
 %type <crepr> decl
 %type <crepr> const_decl_body
 %type <crepr> const_decl_list
@@ -148,9 +129,6 @@ extern int lineNum;
 %type <crepr> decl_id
 %type <crepr> type_spec
 
-
-
-//TODO CHANGE THAT %start input
 %type <crepr> input
 %start input
 
@@ -168,6 +146,8 @@ data_types
   | TK_INT            { $$ = template("%s", $1); }
   | TK_REAL              { $$ = template("%s", $1); }
   | TK_STRING             { $$ = template("%s", $1); }
+  | KW_TRUE           { $$ = "1"; }
+  | KW_FALSE           { $$ = "0"; }
   ;
 
 
@@ -214,19 +194,14 @@ relationalExpression
 
 
 
-logicalAndExpression
+logicalExpressions
   : relationalExpression
-  | logicalAndExpression KW_OR relationalExpression        { $$ = template("%s or %s", $1, $3); }
-  | logicalAndExpression KW_AND relationalExpression        { $$ = template("%s and %s", $1, $3); }
+  | logicalExpressions KW_AND relationalExpression        { $$ = template("%s and %s", $1, $3); }
+  | logicalExpressions KW_OR relationalExpression        { $$ = template("%s or %s", $1, $3); }
   ;
 
-// logicalOrExpression
-//   : logicalAndExpression
-//   | logicalOrExpression KW_OR logicalAndExpression        { $$ = template("%s or %s", $1, $3); }
-// ;
-
 expression
-  : logicalAndExpression
+  : logicalExpressions
   ;
 
 
@@ -256,20 +231,12 @@ __statement
   | __iteration           { $$ = template("%s",$1); }
   | __function        { $$ = template("%s",$1); }
   | __return         { $$ = template("%s",$1); }
-  //| expression_statement     { $$ = template("%s",$1); }
-  //| if_statement           { $$ = template("%s",$1); }
-  // | jump_statement           { $$ = template("%s",$1); }
-  // | loop_statement           { $$ = template("%s",$1); }
   ;
 
 __function
   : TK_IDENT DEL_LEFT_PARENTESIS func_var_list DEL_RIGHT_PARENTESIS DEL_SEMICOLON                     { $$ = template("%s(%s);\n",$1,$3); }
   //| KW_IF expression KW_THEN __statement_list KW_ELSE __statement KW_FI DEL_SEMICOLON   { $$ = template("if %s then\n %s \nelse\n %s fi;\n",$2,$4,$6); }
   ;
-
-  // func_var_empty
-  // : %empty                             { $$ = template("");}
-  // | func_param_list DEL_COLON type_spec     { $$ = template("%s : %s", $1,$3); }
 
 func_var_list
   : %empty                             { $$ = template("");}
@@ -303,7 +270,7 @@ __return
 input
       //: %empty                        {$$ = template("");}
       //: decl_list func_list_empty main_body 
-      : translation_unit //main_body
+      : main_body //main_body
       //:global_declaration                  
       { 
           $$ = template("%s",$1); 
@@ -333,6 +300,11 @@ input
       }                               
       ;
   
+main_body
+  : translation_unit func_main    { $$ = template("%s %s",$1,$2); }
+  | func_main translation_unit   { $$ = template("%s %s",$1,$2); }
+  | translation_unit func_main translation_unit   { $$ = template("%s %s %s",$1,$2,$3); }
+  ;
 
 translation_unit
   : external_declaration                     { $$ = template("%s",$1); }
@@ -343,12 +315,6 @@ external_declaration
   : decl   { $$ = template("%s",$1); }
   | func_list          { $$ = template("%s",$1); } 
   ;  
-
-// function_definition
-//   : declaration_specifiers declarator declaration_list compound_statement    { $$ = template("%s %s %s %s",$1,$2,$3,$4); }
-//   | declaration_specifiers declarator compound_statement                     { $$ = template("%s %s %s",$1,$2,$3);}
-// ;
-
 
 
 /*******************************************************************
@@ -394,10 +360,8 @@ let_decl_init
  */
 decl_id
   : TK_IDENT { $$ = template("%s", $1); }
-  //| DEL_LEFT_PARENTESIS decl_id DEL_COLON type_spec DEL_RIGHT_PARENTESIS{ $$ = template("(%s : %s)", $2,$4); }
   | TK_IDENT DEL_LEFT_BRACKETS TK_INT DEL_RIGHT_BRACKETS { $$ = template("%s[%s]", $1, $3); }
-  //| DEL_LEFT_PARENTESIS decl_id DEL_COLON type_spec DEL_RIGHT_PARENTESIS{ $$ = template("(%s : %s)", $2,$4); }
-  //| DEL_LEFT_PARENTESIS TK_IDENT DEL_COLON type_spec DEL_RIGHT_PARENTESIS{ $$ = template("(%s : %s)", $2,$4); }
+
   ;
 
 type_spec
@@ -410,25 +374,15 @@ type_spec
 /*
  * Function declaration
  */
-// func_list_empty
-//   : %empty {$$ = template("");}
-//   | func_list
-//   ;
 
-
-//TODO ADD SEMICOLON
 func_list
-  : KW_CONST KW_START OP_ASSIGN DEL_LEFT_PARENTESIS DEL_RIGHT_PARENTESIS DEL_COLON KW_INT OP_ARROW DEL_LEFT_CURLY_BRACKETS __statement_list  DEL_RIGHT_CURLY_BRACKETS { $$ = template("const start <- () : int =>{\n%s\n}",$10); } 
-  //| KW_CONST decl_id OP_ASSIGN DEL_LEFT_PARENTESIS func_param_empty DEL_RIGHT_PARENTESIS DEL_COLON func_ret OP_ARROW DEL_LEFT_CURLY_BRACKETS __statement_list  DEL_RIGHT_CURLY_BRACKETS func_list { $$ = template("const %s <- (%s) : %s =>{\n%s\n}\n %s", $2, $5, $8, $11, $13); }
-  | KW_CONST decl_id OP_ASSIGN DEL_LEFT_PARENTESIS func_param_empty DEL_RIGHT_PARENTESIS DEL_COLON func_ret OP_ARROW DEL_LEFT_CURLY_BRACKETS __statement_list  DEL_RIGHT_CURLY_BRACKETS DEL_SEMICOLON { $$ = template("const %s <- (%s) : %s =>{\n%s\n};\n", $2, $5, $8, $11); }
-  //| KW_CONST KW_START OP_ASSIGN DEL_LEFT_PARENTESIS DEL_RIGHT_PARENTESIS DEL_COLON KW_INT OP_ARROW DEL_LEFT_CURLY_BRACKETS __statement_list  DEL_RIGHT_CURLY_BRACKETS { $$ = template("const start <- () : int =>{\n%s\n}",$10); }
+  :  KW_CONST decl_id OP_ASSIGN DEL_LEFT_PARENTESIS func_param_empty DEL_RIGHT_PARENTESIS DEL_COLON func_ret OP_ARROW DEL_LEFT_CURLY_BRACKETS __statement_list  DEL_RIGHT_CURLY_BRACKETS DEL_SEMICOLON { $$ = template("const %s <- (%s) : %s =>{\n%s\n};\n", $2, $5, $8, $11); }
   ;
 
-//COMM
-  // func_list
-  // : KW_CONST decl_id specialExpr func_ret OP_ARROW DEL_LEFT_CURLY_BRACKETS __statement_list  DEL_RIGHT_CURLY_BRACKETS func_list { $$ = template("const %s %s %s =>{\n%s\n}\n %s", $2, $3, $4, $7, $9); }
-  // | KW_CONST decl_id specialExpr func_ret OP_ARROW DEL_LEFT_CURLY_BRACKETS __statement_list  DEL_RIGHT_CURLY_BRACKETS { $$ = template("const %s %s %s =>{\n%s\n}\n", $2, $3, $4, $7); }
-  // ;
+func_main
+  :KW_CONST KW_START OP_ASSIGN DEL_LEFT_PARENTESIS DEL_RIGHT_PARENTESIS DEL_COLON KW_INT OP_ARROW DEL_LEFT_CURLY_BRACKETS __statement_list  DEL_RIGHT_CURLY_BRACKETS DEL_SEMICOLON { $$ = template("const start <- () : int =>{\n%s\n}",$10); } 
+  ;
+
 
 func_param_empty
   : %empty                             { $$ = template("");}

@@ -1,17 +1,13 @@
 #include <stdio.h>
 #include "teaclib.h"
 
-const takis <- () : [] real =>{
-y <- x + 5;
-
-};
- let real : test[5]<-7, x, rfw4;
+const string : we[2]<-1;
  const start <- () : int =>{
 let real : test[24];
 
  const string : we[2]<-9;
 
- while not 2 loop
+ while a and (not -2) loop
  y <- x + 5;
  if v * r then
  y <- x + 5;
@@ -34,4 +30,9 @@ fi;
 
  return a * a;
 
-}
+} const takis <- () : [] real =>{
+y <- x + 5;
+
+};
+ let real : test[5]<-7, x, rfw4;
+

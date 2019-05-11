@@ -27,12 +27,8 @@
 --const start <- () : int =>{ x }
 
 
-const takis <- () : [] real =>{
-	y <- x+ 5;
-};
 
-let test[5] <- 7, x, rfw4 : real;
---const we[2] : string;
+const we[2]<-true : string;
 
 
 const start <- () : int =>{
@@ -40,7 +36,7 @@ const start <- () : int =>{
 let test[24]: real;
 const we[2]<-9: string;
 
-	while not 2 loop
+	while a and (not -2) loop
 		y <- x+ 5;
 
 		if v * r then 
@@ -60,7 +56,14 @@ const we[2]<-9: string;
 	talis();
 
 	return a * a ;
-}
+};
+
+const takis <- () : [] real =>{
+	y <- x+ 5;
+};
+
+let test[5] <- 7, x, rfw4 : real;
+
 --const testaer <- 9 : int;
 
 --const x {y}
