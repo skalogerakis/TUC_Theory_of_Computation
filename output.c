@@ -1,38 +1,81 @@
 #include <stdio.h>
 #include "teaclib.h"
 
-const string : we[2]<-1;
- const start <- () : int =>{
-let real : test[24];
+int limit, number, counter;
 
- const string : we[2]<-9;
+int prime(int n) {
+	int i;
 
- while a and (not -2) loop
- y <- x + 5;
- if v * r then
- y <- x + 5;
- 
-fi;
+	int result, isPrime;
 
- y <- x + 5;
- 
-pool;
+	if(n < 0){
+	result = prime(-n);
 
- if v * r then
- y <- x + 5;
- 
-fi;
+	}else{
+	if(n < 2){
+	result = 0;
 
- e <- rw %s;
- talis(tsokailo / 3 , tso2);
+	}else{
+	if(n == 2){
+	result = 1;
 
- talis();
+	}else{
+	if(n % 2 == 0){
+	result = 0;
 
- return a * a;
+	}else{
+	i = 3;
 
-} const takis <- () : [] real =>{
-y <- x + 5;
+	isPrime = 1;
+
+	while(isPrime and (i < n / 2)){
+	isPrime = n % i != 0;
+
+	i = i + 2;
+
+	}
+
+	result = isPrime;
+
+	return result;
+	
+	
+	
+	
 
 };
- let real : test[5]<-7, x, rfw4;
+
+
+int main(){
+	limit = readInt();
+
+	counter = 0;
+
+	number = 2;
+
+	while(number <= limit){
+	if(prime(number)){
+	counter = counter + 1;
+
+	writeInt(number);
+
+
+	writeString(" ");
+
+
+	}
+
+	number = number + 1;
+	
+
+	}
+
+	writeString("\n");
+
+
+	writeInt(counter);
+
+
+	return 0;
+}
 

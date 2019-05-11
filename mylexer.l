@@ -90,41 +90,41 @@ then        { printf("token KEYWORD_THEN:\t%s\n", yytext); return KW_THEN;};
 fi          { printf("token KEYWORD_FI:\t%s\n", yytext); return KW_FI;};
 const       { printf("token KEYWORD_CONST:\t%s\n", yytext); return KW_CONST;};
 start       { printf("token KEYWORD_START:\t%s\n", yytext); return KW_START;};
-bool         { printf("token KEYWORD_BOOL: \t%s\n", yytext); return KW_BOOL;};
-real         { printf("token KEYWORD_REAL: \t%s\n", yytext); return KW_REAL;};
-int         { printf("token KEYWORD_INT: \t%s\n", yytext); return KW_INT;};
-string      { printf("token KEYWORD_STRING: \t%s\n", yytext); return KW_STRING;};
+bool         { printf("token KEYWORD_BOOL:\t%s\n", yytext); return KW_BOOL;};
+real         { printf("token KEYWORD_REAL:\t%s\n", yytext); return KW_REAL;};
+int         { printf("token KEYWORD_INT:\t%s\n", yytext); return KW_INT;};
+string      { printf("token KEYWORD_STRING:\t%s\n", yytext); return KW_STRING;};
 
-let         { printf("token KEYWORD_LET: \t%s\n", yytext); return KW_LET;};
-false        { printf("token KEYWORD_FALSE: \t%s\n", yytext); return KW_FALSE;};
-true         { printf("token KEYWORD_TRUE: \t%s\n", yytext); return KW_TRUE;};
-while         { printf("token KEYWORD_WHILE: \t%s\n", yytext); return KW_WHILE;};
-loop         { printf("token KEYWORD_LOOP: \t%s\n", yytext); return KW_LOOP;};
-pool         { printf("token KEYWORD_POOL: \t%s\n", yytext); return KW_POOL;};
-return         { printf("token KEYWORD_RETURN: \t%s\n", yytext); return KW_RETURN;};
-and         { printf("token OP_AND: \t%s\n", yytext); return KW_AND;};
-or         { printf("token OP_OR: \t%s\n", yytext); return KW_OR;};
-not         { printf("token OP_NOT: \t%s\n", yytext); return KW_NOT;};
+let         { printf("token KEYWORD_LET:\t%s\n", yytext); return KW_LET;};
+false        { printf("token KEYWORD_FALSE:\t%s\n", yytext); return KW_FALSE;};
+true         { printf("token KEYWORD_TRUE:\t%s\n", yytext); return KW_TRUE;};
+while         { printf("token KEYWORD_WHILE:\t%s\n", yytext); return KW_WHILE;};
+loop         { printf("token KEYWORD_LOOP:\t%s\n", yytext); return KW_LOOP;};
+pool         { printf("token KEYWORD_POOL:\t%s\n", yytext); return KW_POOL;};
+return         { printf("token KEYWORD_RETURN:\t%s\n", yytext); return KW_RETURN;};
+and         { printf("token OP_AND:\t%s\n", yytext); return KW_AND;};
+or         { printf("token OP_OR:\t%s\n", yytext); return KW_OR;};
+not         { printf("token OP_NOT:\t%s\n", yytext); return KW_NOT;};
 
 {ID}        { yylval.crepr = strdup(yytext); printf("token IDENTIFIER: \t%s\n", yytext);return TK_IDENT; }
 {NUMBER}    { yylval.crepr = strdup(yytext); printf("token NUMBER: \t%s\n", yytext); return TK_INT; }
 {REAL}      { yylval.crepr = strdup(yytext); printf("token REAL: \t%s\n", yytext); return TK_REAL; }
 {STRING}    { yylval.crepr = strdup(yytext); printf("token STRING: \t%s\n", yytext); return TK_STRING; }
 
-"<-"        { printf("token OP_ASSIGN: \t%s\n", yytext); return OP_ASSIGN;};
+"<-"        { printf("token OP_ASSIGN:\t%s\n", yytext); return OP_ASSIGN;};
 
-":"        { printf("token DEL_COLON: \t%s\n", yytext); return DEL_COLON;};
-","        { printf("token DEL_COMMA: \t%s\n", yytext); return DEL_COMMA;};
+":"        { printf("token DEL_COLON:\t%s\n", yytext); return DEL_COLON;};
+","        { printf("token DEL_COMMA:\t%s\n", yytext); return DEL_COMMA;};
 ";"        { printf("token DEL_SEMICOLON: \t%s\n", yytext); return DEL_SEMICOLON;};
-"("        { printf("token DEL_LEFT_PARENTESIS: \t%s\n", yytext); return DEL_LEFT_PARENTESIS;};
-")"        { printf("token DEL_RIGHT_PARENTESIS: \t%s\n", yytext); return DEL_RIGHT_PARENTESIS;};
-"{"        { printf("token DEL_LEFT_CURLY_BRACKETS: \t%s\n", yytext); return DEL_LEFT_CURLY_BRACKETS;};
+"("        { printf("token DEL_LEFT_PARENTESIS:\t%s\n", yytext); return DEL_LEFT_PARENTESIS;};
+")"        { printf("token DEL_RIGHT_PARENTESIS:\t%s\n", yytext); return DEL_RIGHT_PARENTESIS;};
+"{"        { printf("token DEL_LEFT_CURLY_BRACKETS:\t%s\n", yytext); return DEL_LEFT_CURLY_BRACKETS;};
 "}"        { printf("token DEL_RIGHT_CURLY_BRACKETS: \t%s\n", yytext); return DEL_RIGHT_CURLY_BRACKETS;};
-"["        { printf("token DEL_LEFT_BRACKETS: \t%s\n", yytext); return DEL_LEFT_BRACKETS;};
-"]"        { printf("token DEL_RIGHT_BRACKETS: \t%s\n", yytext); return DEL_RIGHT_BRACKETS;};
+"["        { printf("token DEL_LEFT_BRACKETS:\t%s\n", yytext); return DEL_LEFT_BRACKETS;};
+"]"        { printf("token DEL_RIGHT_BRACKETS:\t%s\n", yytext); return DEL_RIGHT_BRACKETS;};
 
-"<="       { printf("token LESS_EQUAL : \t%s\n", yytext); return OP_SMALLER_EQUALS;};
-"<"         { printf("token LESS : \t%s\n", yytext); return OP_SMALLER;};
+"<="       { printf("token LESS_EQUAL:\t%s\n", yytext); return OP_SMALLER_EQUALS;};
+"<"         { printf("token LESS:\t%s\n", yytext); return OP_SMALLER;};
 "=>"       { printf("token OP_ARROW : \t%s\n", yytext); return OP_ARROW;};
 "="       { printf("token OP_EQUALS : \t%s\n", yytext); return OP_EQUALS;};
 "!="       { printf("token OP_NOT_EQUALS : \t%s\n", yytext); return OP_NOT_EQUALS;};

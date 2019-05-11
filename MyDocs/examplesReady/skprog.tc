@@ -25,10 +25,22 @@
 
 
 --const start <- () : int =>{ x }
+(*
 
 
+--const a[]<-8 : string;
+--const a<-4, n<-4 : bool;
+let test[24],lasd <-9,sef: int;
+const takis <- (n, m[]: string) : [] real =>{
+	y <- x+ 5;
+	if v * r then 
+		y <- true;
+		y <- false;
+	else
+		y <- x+ 5;
+	fi;
 
-const we[2]<-true : string;
+};
 
 
 const start <- () : int =>{
@@ -50,7 +62,7 @@ const we[2]<-9: string;
 		y <- x+ 5;
 	fi;
 
-	e <- rw % 5;
+	e <- rw % sdf;
 
 	talis(tsokailo / 3, tso2);
 	talis();
@@ -58,8 +70,8 @@ const we[2]<-9: string;
 	return a * a ;
 };
 
-const takis <- () : [] real =>{
-	y <- x+ 5;
+const takis <- () : int =>{
+	--y <- x+ 5;
 };
 
 let test[5] <- 7, x, rfw4 : real;
@@ -67,3 +79,60 @@ let test[5] <- 7, x, rfw4 : real;
 --const testaer <- 9 : int;
 
 --const x {y}
+*)
+
+
+
+
+
+-- File: prime.tc
+let limit, number, counter: int;
+  
+
+const prime <- (n: int): bool => {
+
+  let i: int; 
+  let result, isPrime: bool;
+
+
+  if n < 0 then
+    result <- prime(-n);
+  else if n < 2 then
+    result <- false;
+  else if n = 2 then
+    result <- true;
+  else if n % 2 = 0 then
+    result <- false;
+  else 
+    i <- 3;
+    isPrime <- true;
+    while isPrime and (i < n / 2) loop
+      isPrime <- n % i != 0;
+      i <- i + 2;
+    pool;
+    result <- isPrime;
+  --fi;
+  
+  return result;
+};
+
+const start <- ():int => {
+
+  limit <- readInt();
+  counter <- 0;
+  number <- 2;
+
+  while number <= limit loop 
+    if prime(number) then 
+      counter <- counter + 1;
+      writeInt(number);
+      writeString(" ");
+    fi;
+    number <- number + 1;
+  pool;
+  
+  writeString("\n");
+  writeInt(counter);
+	
+  return 0;
+};

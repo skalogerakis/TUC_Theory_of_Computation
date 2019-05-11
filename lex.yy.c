@@ -925,72 +925,72 @@ YY_RULE_SETUP
 case 7:
 YY_RULE_SETUP
 #line 93 "mylexer.l"
-{ printf("token KEYWORD_BOOL: \t%s\n", yytext); return KW_BOOL;};
+{ printf("token KEYWORD_BOOL:\t%s\n", yytext); return KW_BOOL;};
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 94 "mylexer.l"
-{ printf("token KEYWORD_REAL: \t%s\n", yytext); return KW_REAL;};
+{ printf("token KEYWORD_REAL:\t%s\n", yytext); return KW_REAL;};
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 95 "mylexer.l"
-{ printf("token KEYWORD_INT: \t%s\n", yytext); return KW_INT;};
+{ printf("token KEYWORD_INT:\t%s\n", yytext); return KW_INT;};
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 96 "mylexer.l"
-{ printf("token KEYWORD_STRING: \t%s\n", yytext); return KW_STRING;};
+{ printf("token KEYWORD_STRING:\t%s\n", yytext); return KW_STRING;};
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 98 "mylexer.l"
-{ printf("token KEYWORD_LET: \t%s\n", yytext); return KW_LET;};
+{ printf("token KEYWORD_LET:\t%s\n", yytext); return KW_LET;};
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 99 "mylexer.l"
-{ printf("token KEYWORD_FALSE: \t%s\n", yytext); return KW_FALSE;};
+{ printf("token KEYWORD_FALSE:\t%s\n", yytext); return KW_FALSE;};
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 100 "mylexer.l"
-{ printf("token KEYWORD_TRUE: \t%s\n", yytext); return KW_TRUE;};
+{ printf("token KEYWORD_TRUE:\t%s\n", yytext); return KW_TRUE;};
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 101 "mylexer.l"
-{ printf("token KEYWORD_WHILE: \t%s\n", yytext); return KW_WHILE;};
+{ printf("token KEYWORD_WHILE:\t%s\n", yytext); return KW_WHILE;};
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
 #line 102 "mylexer.l"
-{ printf("token KEYWORD_LOOP: \t%s\n", yytext); return KW_LOOP;};
+{ printf("token KEYWORD_LOOP:\t%s\n", yytext); return KW_LOOP;};
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
 #line 103 "mylexer.l"
-{ printf("token KEYWORD_POOL: \t%s\n", yytext); return KW_POOL;};
+{ printf("token KEYWORD_POOL:\t%s\n", yytext); return KW_POOL;};
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
 #line 104 "mylexer.l"
-{ printf("token KEYWORD_RETURN: \t%s\n", yytext); return KW_RETURN;};
+{ printf("token KEYWORD_RETURN:\t%s\n", yytext); return KW_RETURN;};
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
 #line 105 "mylexer.l"
-{ printf("token OP_AND: \t%s\n", yytext); return KW_AND;};
+{ printf("token OP_AND:\t%s\n", yytext); return KW_AND;};
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 106 "mylexer.l"
-{ printf("token OP_OR: \t%s\n", yytext); return KW_OR;};
+{ printf("token OP_OR:\t%s\n", yytext); return KW_OR;};
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 107 "mylexer.l"
-{ printf("token OP_NOT: \t%s\n", yytext); return KW_NOT;};
+{ printf("token OP_NOT:\t%s\n", yytext); return KW_NOT;};
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
@@ -1015,17 +1015,17 @@ YY_RULE_SETUP
 case 25:
 YY_RULE_SETUP
 #line 114 "mylexer.l"
-{ printf("token OP_ASSIGN: \t%s\n", yytext); return OP_ASSIGN;};
+{ printf("token OP_ASSIGN:\t%s\n", yytext); return OP_ASSIGN;};
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 116 "mylexer.l"
-{ printf("token DEL_COLON: \t%s\n", yytext); return DEL_COLON;};
+{ printf("token DEL_COLON:\t%s\n", yytext); return DEL_COLON;};
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 117 "mylexer.l"
-{ printf("token DEL_COMMA: \t%s\n", yytext); return DEL_COMMA;};
+{ printf("token DEL_COMMA:\t%s\n", yytext); return DEL_COMMA;};
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
@@ -1035,17 +1035,17 @@ YY_RULE_SETUP
 case 29:
 YY_RULE_SETUP
 #line 119 "mylexer.l"
-{ printf("token DEL_LEFT_PARENTESIS: \t%s\n", yytext); return DEL_LEFT_PARENTESIS;};
+{ printf("token DEL_LEFT_PARENTESIS:\t%s\n", yytext); return DEL_LEFT_PARENTESIS;};
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 120 "mylexer.l"
-{ printf("token DEL_RIGHT_PARENTESIS: \t%s\n", yytext); return DEL_RIGHT_PARENTESIS;};
+{ printf("token DEL_RIGHT_PARENTESIS:\t%s\n", yytext); return DEL_RIGHT_PARENTESIS;};
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 121 "mylexer.l"
-{ printf("token DEL_LEFT_CURLY_BRACKETS: \t%s\n", yytext); return DEL_LEFT_CURLY_BRACKETS;};
+{ printf("token DEL_LEFT_CURLY_BRACKETS:\t%s\n", yytext); return DEL_LEFT_CURLY_BRACKETS;};
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
@@ -1055,22 +1055,22 @@ YY_RULE_SETUP
 case 33:
 YY_RULE_SETUP
 #line 123 "mylexer.l"
-{ printf("token DEL_LEFT_BRACKETS: \t%s\n", yytext); return DEL_LEFT_BRACKETS;};
+{ printf("token DEL_LEFT_BRACKETS:\t%s\n", yytext); return DEL_LEFT_BRACKETS;};
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
 #line 124 "mylexer.l"
-{ printf("token DEL_RIGHT_BRACKETS: \t%s\n", yytext); return DEL_RIGHT_BRACKETS;};
+{ printf("token DEL_RIGHT_BRACKETS:\t%s\n", yytext); return DEL_RIGHT_BRACKETS;};
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
 #line 126 "mylexer.l"
-{ printf("token LESS_EQUAL : \t%s\n", yytext); return OP_SMALLER_EQUALS;};
+{ printf("token LESS_EQUAL:\t%s\n", yytext); return OP_SMALLER_EQUALS;};
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
 #line 127 "mylexer.l"
-{ printf("token LESS : \t%s\n", yytext); return OP_SMALLER;};
+{ printf("token LESS:\t%s\n", yytext); return OP_SMALLER;};
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
