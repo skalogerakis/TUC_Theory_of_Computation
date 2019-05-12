@@ -4,60 +4,6 @@
   // #define ANSI_COLOR_GREEN   "\x1b[32m"
   // #define ANSI_COLOR_CYAN    "\x1b[36m"
   // #define ANSI_COLOR_RESET   "\x1b[0m"
-
-  // #define TK_IDENT 258
-  // #define TK_INT 259
-  // #define TK_REAL 260
-  // #define TK_STRING 261
-
-  // //KEYWORD DEFINTION
-  // #define KW_INT 210
-  // #define KW_REAL 211
-  // #define KW_BOOL 212
-  // #define KW_STRING 213
-  // #define KW_TRUE 214
-  // #define KW_FALSE 215
-  // #define KW_IF 216  
-  // #define KW_THEN 217
-  // #define KW_ELSE 218
-  // #define KW_FI 219
-  // #define KW_WHILE 220
-  // #define KW_LOOP 221
-  // #define KW_POOL 222
-  // #define KW_CONST 223
-  // #define KW_LET 224
-  // #define KW_RETURN 225
-  // #define KW_NOT 226
-  // #define KW_AND 227
-  // #define KW_OR 228
-  // #define KW_START 229
-
-  // //DEFINE OPERATORS
-  // #define OP_PLUS 270
-  // #define OP_MINUS 271
-  // #define OP_MUL 272
-  // #define OP_DIV 273
-  // #define OP_MOD 274
-  // #define OP_EQUALS 275
-  // #define OP_NOT_EQUALS 276
-  // #define OP_SMALLER 277
-  // #define OP_SMALLER_EQUALS 278
-  // #define OP_ASSIGN 279
-  // //ALSO ADDED ARROW OP
-  // #define OP_ARROW 280
-
-  // //DEFINE DELIMETERS
-  // #define DEL_SEMICOLON 300
-  // #define DEL_LEFT_PARENTESIS 301
-  // #define DEL_RIGHT_PARENTESIS 302
-  // #define DEL_COMMA 303
-  // #define DEL_LEFT_BRACKETS 304
-  // #define DEL_RIGHT_BRACKETS 305
-  // #define DEL_COLON 306
-  // //ADDED CURLY BRACKETS.NEEDED FOR FUNCTIONS
-  // #define DEL_LEFT_CURLY_BRACKETS 307
-  // #define DEL_RIGHT_CURLY_BRACKETS 308
-
   #include <math.h>
   #include <stdio.h>
   #include <string.h>  

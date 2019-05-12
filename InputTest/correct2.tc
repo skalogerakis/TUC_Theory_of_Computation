@@ -1,0 +1,36 @@
+--Example that calculates the n-th fibonaaci number
+-- This example showcases more c functionality and
+-- some functionality such as function declaration
+-- and variable declaration
+
+const fib <-(n:int) : int => { 
+  
+  let a <- 0, b <- 1, c, i :int ; 
+
+  if n = 0 then
+    return a;
+  else
+
+  fi;
+
+  i <- 2;
+  while i <= n loop
+  	c <- a + b; 
+    a <- b; 
+    b <- c;
+    i<-i + 1; 
+  pool;
+  
+  return b; 
+}; 
+  
+const start <- () : int =>{
+  let n : int;
+
+  writeString("GIVE INPUT TO CALCULATE THE N-TH FIBONNACI NUMBER\n");
+  --EXAMPLE FOR INPUT 9 THE RESULT SHOULD BE 34
+  n <- readInt();
+  writeInt(fib(n));
+  writeString("\n");  
+  return 0; 
+}; 

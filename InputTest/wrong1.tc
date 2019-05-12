@@ -1,0 +1,12 @@
+(*Wrong1.tc has an error on line 10. fi; is missing so it should not execute*)
+
+const start <- () : int =>{
+    const k<- 2: int;
+
+    if (k % 3 = 0) then
+        writeString("WILL NOT EXECute");
+    else
+        i <- 0;    
+        tester(i,i);    
+    
+};

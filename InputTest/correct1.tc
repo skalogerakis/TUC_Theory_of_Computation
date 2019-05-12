@@ -1,0 +1,39 @@
+
+(* TESTING OUT SOME COMMENTS ON .TC FILES*)
+-- Simple functionality, handle some arrays. Not very impressive but shows of
+-- concepts of grammar and expressions
+
+--show of a function
+--BONUS FUNCTION DECLARATION
+const tester <- (i, m: int) : real =>{
+    let table[4]: int;
+            table[0] <- (((1 + 1) - 5 + (7 % 7)) * 2); (*-6 the expected result*)
+            table[1] <- table[0] * 2;   (*-12 the expected result*)
+            table[2] <- table[0] * table[1];    (*72 the expected result*)
+            table[3] <- 3;
+
+            while i!=4 loop
+                writeString("TABLE[");
+                writeInt(i);
+                writeString("]:");
+                writeInt(table[i]);
+                writeString("\n");
+                i<-i + 1;
+            pool;
+            return 2.3;
+
+};
+
+const start <- () : int =>{
+    let i<- 1,table[5]: int;
+    const k<- 2: int;
+
+    if (k % 3 = 0) then
+        --THERE IS NO WAY OF THIS HAPPENING
+        writeString("FAIL");
+    else
+        i <- 0;    
+        tester(i,i);    
+    fi;
+    writeString("Success\n");
+};

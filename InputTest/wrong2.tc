@@ -1,0 +1,6 @@
+--Wrong2.tc has no main function. Should not execute successfuly
+
+const noMainNoFUN <- (i, m: int) : [] string =>{
+    let s: int;
+    return s;
+};

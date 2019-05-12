@@ -10,13 +10,17 @@
 #chmod 755 ./Pthread_FineGrained/threadFine
 
 #echo -e "\nRe-Run everything on lex file"
-echo -e "\n\nRun everything again\n"
+echo -e "\n\nRun everything \n"
+
+echo -e "\nPlease give as input a .tc file name without file extension found in folder InputTest(ex. for prime.tc give prime as input)\n"
+
+read input
 
 bison -d -v -r all myanalyzer.y
 flex mylexer.l #give name of .l file
 gcc -o mycompiler myanalyzer.tab.c lex.yy.c cgen.c -lfl
 #./mylexer < ./MyDocs/FlexInput/example-3.test-1.in #give name of input file
-./mycompiler < ./MyDocs/examplesReady/skprog.tc #give name of input file
+./mycompiler < ./InputTest/$input.tc #give name of input file
 
 echo -e "\nProcedure finished."
 

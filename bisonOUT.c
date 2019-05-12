@@ -12,23 +12,23 @@ int prime(int n) {
 	result = prime(-n);
 
 	}else{
-		if(n < 2){
+	if(n < 2){
 	result = 0;
 
 	}else{
-		if(n == 2){
+	if(n == 2){
 	result = 1;
 
 	}else{
-		if(n % 2 == 0){
+	if(n % 2 == 0){
 	result = 0;
 
 	}else{
-		i = 3;
+	i = 3;
 
 	isPrime = 1;
 
-	while(isPrime and (i < n / 2)){
+	while(isPrime && (i < n / 2)){
 	isPrime = n % i != 0;
 
 	i = i + 2;
@@ -36,15 +36,12 @@ int prime(int n) {
 	}
 
 	result = isPrime;
-
-		}
-
+	}
+	}
+	}
+	}
 
 	return result;
-
-
-
-
 
 };
 
@@ -57,7 +54,7 @@ int main(){
 	number = 2;
 
 	while(number <= limit){
-	if(prime(number)){
+		if(prime(number)){
 	counter = counter + 1;
 
 	writeInt(number);
@@ -65,12 +62,9 @@ int main(){
 
 	writeString(" ");
 
-
-		}
-
+	}
 
 	number = number + 1;
-
 
 	}
 
