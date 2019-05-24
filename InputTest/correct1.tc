@@ -33,7 +33,7 @@ const start <- () : int =>{
         writeString("FAIL");
     else
         i <- 0;    
-        tester(i,i);    
+        x = tester(i,i + 3);    
     fi;
     writeString("Success\n");
 };

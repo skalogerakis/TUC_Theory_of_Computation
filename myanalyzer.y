@@ -344,13 +344,12 @@ data_types
   | KW_FALSE           { $$ = "0"; }
   ;
 
-
+//TODO CHECK THAT AND SEE THE DIFFERENCE WITH PREVIOUS EDITION
 specialExpr
   : data_types
   | TK_IDENT DEL_LEFT_BRACKETS expression DEL_RIGHT_BRACKETS              { $$ = template("%s[%s]",$1,$3); }
   | DEL_LEFT_PARENTESIS expression DEL_RIGHT_PARENTESIS              { $$ = template("(%s)", $2); }
-  | TK_IDENT DEL_LEFT_PARENTESIS  DEL_RIGHT_PARENTESIS              { $$ = template("%s()",$1); }
-  | TK_IDENT DEL_LEFT_PARENTESIS expression  DEL_RIGHT_PARENTESIS              { $$ = template("%s(%s)",$1,$3); }
+  | TK_IDENT DEL_LEFT_PARENTESIS func_var_list  DEL_RIGHT_PARENTESIS              { $$ = template("%s(%s)",$1,$3); }
   ;
 
 

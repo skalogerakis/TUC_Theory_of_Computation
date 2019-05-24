@@ -1,47 +1,59 @@
 #include <stdio.h>
 #include "teaclib.h"
 
-int fib(int n) {
-	int a = 0, b = 1, c, i;
+double tester(int i, int m) {
+	int table[4];
 
-	if(n == 0){
-	return a;
+	table[0] = (((1 + 1) - 5 + (7 % 7)) * 2);
 
-	}else{
-	}
+	table[1] = table[0] * 2;
 
-	i = 2;
+	table[2] = table[0] * table[1];
 
-	while(i <= n){
-	c = a + b;
+	table[3] = 3;
 
-	a = b;
-
-	b = c;
-
-	i = i + 1;
-
-	}
-
-	return b;
-
-};
+	while(i != 4){
+	writeString("TABLE[");
 
 
-int main(){
-	int n;
-
-	writeString("GIVE INPUT TO CALCULATE THE N-TH FIBONNACI NUMBER\n");
+	writeInt(i);
 
 
-	n = readInt();
+	writeString("]:");
 
-	writeInt(fib(n));
+
+	writeInt(table[i]);
 
 
 	writeString("\n");
 
 
-	return 0;
+	i = i + 1;
+
+	}
+
+	return 2.3;
+
+};
+
+
+int main(){
+	int i = 1, table[5];
+
+	const int k = 2;
+
+	if((k % 3 == 0)){
+	writeString("FAIL");
+
+
+	}else{
+	i = 0;
+
+	tester(num , power + 3);
+
+	}
+
+	writeString("Success\n");
+
 }
 
